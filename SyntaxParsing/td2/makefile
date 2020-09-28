@@ -7,7 +7,7 @@
 CC=gcc
 CFLAGS=-Wall
 LDFLAGS=-Wall -lfl
-EXEC=justify
+EXEC=expand
 
 # all: $(EXEC) clean
 

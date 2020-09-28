@@ -1,0 +1,9 @@
+%{
+%}
+%option nounput
+%option noinput
+%%
+-\n         ;
+[^a-zA-Z]-  ECHO;
+<<EOF>>     { printf("\n"); return 0; }
+%%
