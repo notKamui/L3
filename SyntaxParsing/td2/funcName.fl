@@ -6,14 +6,12 @@
 wspace [ \t\n]
 %%
 <LNCOM>\n                           BEGIN INITIAL;
-<LNCOM>.|[ \t]                      ;
 
 <BLCOM>\*\/                         BEGIN INITIAL;
-<BLCOM>.|{wspace}                   ;
 
 <QUTD>\"                            BEGIN INITIAL;
-<QUTD>.|{wspace}                    ;
 
+<LNCOM,BLCOM,QUTD>.|{wspace}        ;
 
 \/\/                                BEGIN LNCOM;
 \/\*                                BEGIN BLCOM;
