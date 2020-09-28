@@ -1,0 +1,15 @@
+%{
+    int count = 0;
+%}
+%option nounput
+%option noinput
+%%
+[^a-zA-Z]   ;
+.           {
+    ECHO;
+    count++;
+    if (count % 5 == 0)
+        printf("\n");
+}
+<<EOF>>     { printf("\n"); return 0; }
+%%

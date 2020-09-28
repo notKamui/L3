@@ -1,0 +1,26 @@
+%{
+%}
+%option nounput
+%option noinput
+%x LNCOM BLCOM QUTD
+wspace [ \t\n]
+%%
+<LNCOM>\n                           BEGIN INITIAL;
+<LNCOM>.|[ \t]                      ;
+
+<BLCOM>\*\/                         BEGIN INITIAL;
+<BLCOM>.|{wspace}                   ;
+
+<QUTD>\"                            BEGIN INITIAL;
+<QUTD>.|{wspace}                    ;
+
+
+\/\/                                BEGIN LNCOM;
+\/\*                                BEGIN BLCOM;
+\"                                  BEGIN QUTD;
+
+[_a-zA-Z][_a-zA-Z0-9]*/[ \t\n]*\(   printf("%s ", yytext);
+.|{wspace}                          ;
+
+<<EOF>>                             { printf("\n"); return 0; }
+%%
