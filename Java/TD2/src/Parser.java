@@ -33,6 +33,5 @@ public class Parser {
             }
         }
         return ipv4;
-
     }
 }
