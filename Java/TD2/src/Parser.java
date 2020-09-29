@@ -12,24 +12,24 @@ public class Parser {
         System.out.println();
 
         var ipv4 = stringToIPV4("192.168.0.1");
-        for (short e : ipv4) {
-            System.out.println(e);
+        for (byte e : ipv4) {
+            System.out.println(e & 0xFF);
         }
     }
 
     /**
-     * Converts a String to an IPV4 short array
+     * Converts a String to an IPV4 byte array
      *
      * @param address String of the form xxx.xxx.xxx.xxx
-     * @return a short array containing the IPV4 or {0, 0, 0, 0} if the address is not valid
+     * @return a byte array containing the IPV4 or {0, 0, 0, 0} if the address is not valid
      */
-    public static short[] stringToIPV4(String address) {
+    public static byte[] stringToIPV4(String address) {
         var regex = Pattern.compile("([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})");
         var matcher = regex.matcher(address);
-        var ipv4 = new short[4];
+        var ipv4 = new byte[4];
         while (matcher.find()) {
             for (var i = 0; i < 4; i++) {
-                ipv4[i] = Short.parseShort(matcher.group(i+1));
+                ipv4[i] = (byte)Short.parseShort(matcher.group(i+1));
             }
         }
         return ipv4;

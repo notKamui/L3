@@ -51,6 +51,4 @@
 
 3. `[^0-9]*[0-9]+` + `.replaceAll("[^0-9]", "")`
 
-4. See Parser.java ; Cannot use byte because `Byte.MAX_VALUE == 127` 
-   (byte is signed **//still think it's bad design//**)
-   -> using short instead
+4. See Parser.java ; /!\\ byte is signed (`Byte.MAX_VALUE == 127`) **//still think it's bad design//**
