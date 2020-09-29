@@ -29,7 +29,9 @@ public class Parser {
         var ipv4 = new byte[4];
         while (matcher.find()) {
             for (var i = 0; i < 4; i++) {
-                ipv4[i] = (byte)Short.parseShort(matcher.group(i+1));
+                var group = Short.parseShort(matcher.group(i+1));
+                if (group > 255) return new byte[4];
+                ipv4[i] = (byte)group;
             }
         }
         return ipv4;
