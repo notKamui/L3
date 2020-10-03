@@ -1,0 +1,1 @@
+int mytee(char* fname);
