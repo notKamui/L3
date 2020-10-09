@@ -2,7 +2,7 @@ CC      := gcc
 CCFLAGS := -Wall
 LDFLAGS := -ansi
 
-TARGETS:= ex1 ex2
+TARGETS:= ex1 ex2 ex3 bunnysay
 MAINS  := $(addsuffix .o, $(TARGETS) )
 OBJ    := $(MAINS)
 DEPS   :=
