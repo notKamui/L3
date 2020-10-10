@@ -2,7 +2,7 @@ CC      := gcc
 CCFLAGS := -Wall
 LDFLAGS := -ansi
 
-TARGETS:= mytee binom
+TARGETS:= mytee binom lcm
 MAINS  := $(addsuffix .o, $(TARGETS) )
 OBJ    := $(MAINS)
 DEPS   :=
