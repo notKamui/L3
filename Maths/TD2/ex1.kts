@@ -31,7 +31,7 @@ fun ud(n: Int): Int = when {
 fun ue(n: Int): Int = when(n) {
     0 -> 1
     1 -> 1
-    else -> u5(n-1) + (0..n-1).sumBy { i -> ue(i) + ue(i-2-n) }
+    else -> u5(n-1) + (0..n-1).sumBy { i -> ue(i) + ue(n-2-i) }
 }
 
 (0..6).forEach { print("${ua(it)} ") }
