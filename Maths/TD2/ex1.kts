@@ -28,11 +28,11 @@ fun ud(n: Int): Int = when {
     }
 }
 
-fun ue(n: Int): Int = when(n) {
+/*fun ue(n: Int): Int = when(n) {
     0 -> 1
     1 -> 1
-    else -> u5(n-1) + (0..n-1).sumBy { i -> ue(i) + ue(n-2-i) }
-}
+    else -> ue(n-1) + (0..n-1).sumBy { i -> ue(i) + ue(n-2-i) }
+}*/
 
 (0..6).forEach { print("${ua(it)} ") }
 println()
@@ -42,5 +42,5 @@ println()
 println()
 (0..6).forEach { print("${ud(it)} ") }
 println()
-(0..6).forEach { print("${ue(it)} ") }
-println()
+/*(0..6).forEach { print("${ue(it)} ") }
+println()*/
