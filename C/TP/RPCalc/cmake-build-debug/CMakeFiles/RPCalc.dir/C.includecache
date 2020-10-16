@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/notkamui/Documents/Uni/C/TP/RPCalc/include/stack.h
+
+/home/notkamui/Documents/Uni/C/TP/RPCalc/sources/main.c
+stdio.h
+-
+stdlib.h
+-
+../include/stack.h
+/home/notkamui/Documents/Uni/C/TP/RPCalc/include/stack.h
+
+/home/notkamui/Documents/Uni/C/TP/RPCalc/sources/stack.c
+stdio.h
+-
+stdlib.h
+-
+../include/stack.h
+/home/notkamui/Documents/Uni/C/TP/RPCalc/include/stack.h
+

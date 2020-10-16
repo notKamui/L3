@@ -1,0 +1,3 @@
+/home/notkamui/Documents/Uni/C/TP/RPCalc/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/notkamui/Documents/Uni/C/TP/RPCalc/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/notkamui/Documents/Uni/C/TP/RPCalc/cmake-build-debug/CMakeFiles/RPCalc.dir
