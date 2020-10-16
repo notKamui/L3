@@ -1,7 +1,12 @@
+/**
+ * Created by Jimmy @notKamui Teillard
+ * on 16/10/2020
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../include/stack.h"
+#include "stack.h"
 
 Stack *stack_init(int value) {
     Stack *head = (Stack*)malloc(sizeof(Stack));

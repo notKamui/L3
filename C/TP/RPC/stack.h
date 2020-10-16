@@ -51,4 +51,4 @@ Stack *stack_pop(Stack **head);
  */
 void stack_print(Stack *head);
 
-#endif //RPCALC_STACK_H
+#endif

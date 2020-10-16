@@ -1,1 +1,0 @@
-/usr/bin/cc -O3 -DNDEBUG   CMakeFiles/RPCalc.dir/sources/main.c.o CMakeFiles/RPCalc.dir/sources/stack.c.o  -o RPCalc 

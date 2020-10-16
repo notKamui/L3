@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../include/stack.h"
+#include "stack.h"
 
 int main() {
     Stack *stack = stack_init(2);
