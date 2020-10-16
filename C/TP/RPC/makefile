@@ -1,14 +1,14 @@
-INCL	:= stack.h
-SRC		:= main.c stack.c
-OBJ		:= $(SRC:.c=.o)
-LIBS   	:= -lreadline
-EXE 	:= rpcalc
+INCL    := stack.h
+SRC     := main.c stack.c
+OBJ     := $(SRC:.c=.o)
+LIBS    := -lreadline
+EXE     := rpcalc
 
 CC      := gcc
-CFLAGS	:= -ansi -pedantic -Wall -O2
-LIBPATH	:= -L.
-LDFLAGS	:= -o $(EXE) $(LIBPATH) $(LIBS)
-RM		:= rm -f
+CFLAGS  := -ansi -pedantic -Wall -O2
+LIBPATH := -L.
+LDFLAGS := -o $(EXE) $(LIBPATH) $(LIBS)
+RM      := rm -f
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) $*.c
