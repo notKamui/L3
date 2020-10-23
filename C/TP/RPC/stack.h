@@ -23,7 +23,7 @@ typedef struct stack {
  * Creates a new stack
  *
  * @param value is an int (or a char)
- * @returns the head of the new stack
+ * @return the head of the new stack
  */
 Stack *stack_init(int value);
 
@@ -36,12 +36,12 @@ Stack *stack_init(int value);
 void stack_push(Stack **head, int value);
 
 /**
- * Pops the element on TOP of the stack
+ * Pops the value on TOP of the stack
  *
  * @param head is the head of the stack
- * @returns the popped element
+ * @return the popped value
  */
-Stack *stack_pop(Stack **head);
+int stack_pop(Stack **head);
 
 /**
  * Prints the value of the stack ;
@@ -50,5 +50,12 @@ Stack *stack_pop(Stack **head);
  * @param head is the head of the stack
  */
 void stack_print(Stack *head);
+
+/**
+ * Frees the memory of the stack?
+ * 
+ * @param head is the head of the stack
+ */
+void stack_free(Stack **head);
 
 #endif

@@ -25,10 +25,13 @@ void stack_push(Stack **head, int value) {
     *head = newHead;
 }
 
-Stack *stack_pop(Stack **head) {
+int stack_pop(Stack **head) {
+    int ret;
     Stack *popped = *head;
     *head = (*head)->next;
-    return popped;
+    ret = popped->value;
+    free(popped);
+    return ret;
 }
 
 void stack_print(Stack *head) {
@@ -40,4 +43,14 @@ void stack_print(Stack *head) {
         current = current->next;
     }
     printf("]\n");
+}
+
+void stack_free(Stack **head) {
+    Stack *tmp;
+
+    while (*head != NULL) {
+        tmp = *head;
+        *head = (*head)->next;
+        free(tmp);
+    }
 }

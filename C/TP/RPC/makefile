@@ -1,5 +1,5 @@
-INCL    := stack.h
-SRC     := main.c stack.c
+INCL    := stack.h calc.h
+SRC     := main.c stack.c calc.c
 OBJ     := $(SRC:.c=.o)
 LIBS    := -lreadline
 EXE     := rpcalc
