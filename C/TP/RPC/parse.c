@@ -4,16 +4,11 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include <readline/readline.h>
 #include <string.h>
 
-#include "calc.h"
+#include "parse.h"
 
-void calc_instruct(Stack **head, char *token) {
-
-}
-
-int *calc_toint(char *token) {
+int *parse_intornull(char *token) {
     int *ret;
     int i;
 

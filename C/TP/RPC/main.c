@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <readline/readline.h>
 
 #include "stack.h"
-#include "calc.h"
+#include "parse.h"
 
 int main() {
     int *ret;
@@ -23,10 +24,14 @@ int main() {
 
     stack_print(stack);
 
-    ret = calc_toint("2");
+    ret = parse_intornull("2");
     if (ret == NULL) printf("NaN\n");
     else printf("%d\n", *ret);
     free(ret);
+
+    char *str = readline(NULL);
+    printf("%s\n", str);
+    free(str);
 
     return EXIT_SUCCESS;
 }
