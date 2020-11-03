@@ -25,6 +25,8 @@ public class Point {
     }
 
     public double distance(Point other) {
-        return Math.sqrt((this.x - other.x)*(this.x - other.x) + (this.y - other.y)*(this.y - other.y));
+        int deltX = this.x - other.x;
+        int deltY = this.y - other.y;
+        return Math.sqrt(deltX*deltX + deltY*deltY);
     }
 }

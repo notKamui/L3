@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Circle {
     private final Point center;
-    private int radius;
+    private final int radius;
 
     public Circle(Point center, int radius) {
         if (radius < 0) throw new IllegalArgumentException("A radius must be positive");
@@ -27,7 +27,7 @@ public class Circle {
     }
 
     public double surface() {
-        return Math.PI * (radius * radius);
+        return Math.PI * radius * radius;
     }
 
     public boolean contains(Point p) {
@@ -36,12 +36,18 @@ public class Circle {
 
     public static boolean contains(Point p, Circle... circles) {
         for (Circle circle : circles) {
-            if (circle.contains(p)) return true;
+            if (circle.contains(p)) {
+                return true;
+            }
         }
         return false;
     }
 
-    public void setRadius(int radius) {
-        this.radius = radius;
+    double distanceToCenter(Point point) {
+        return point.distance(center);
+    }
+
+    int radius() {
+        return radius;
     }
 }
