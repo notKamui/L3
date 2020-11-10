@@ -1,13 +1,13 @@
-INCL    := stack.h parse.h
-SRC     := main.c stack.c parse.c
+INCL    := stack.h parse.h calc.h
+SRC     := main.c stack.c parse.c calc.c
 OBJ     := $(SRC:.c=.o)
-LIBS    := -lreadline
+LIBS    := -lreadline -lm
 EXE     := rpcalc
 
 CC      := gcc
-CFLAGS  := -ansi -pedantic -Wall -O2
+CFLAGS  := -ansi -pedantic -Wall -O2 -g
 LIBPATH := -L.
-LDFLAGS := -o $(EXE) $(LIBPATH) $(LIBS)
+LDFLAGS := -o $(EXE) $(LIBPATH) $(LIBS) -O2 -g
 RM      := rm -f
 
 %.o: %.c

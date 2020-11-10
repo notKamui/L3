@@ -34,6 +34,17 @@ int stack_pop(Stack **head) {
     return ret;
 }
 
+void stack_reverse(Stack **head) {
+    Stack *tmp;
+    
+    if (stack_size(*head) >= 2) {
+        tmp = (*head)->next;
+        (*head)->next = tmp->next;
+        tmp->next = *head;
+        *head = tmp;
+    }
+}
+
 void stack_print(Stack *head) {
     Stack *current = head;
 
@@ -43,6 +54,17 @@ void stack_print(Stack *head) {
         current = current->next;
     }
     printf("]\n");
+}
+
+int stack_size(Stack *head) {
+    int size = 0;
+
+    while (head != NULL) {
+        head = head->next;
+        size++;
+    }
+
+    return size;
 }
 
 void stack_free(Stack **head) {

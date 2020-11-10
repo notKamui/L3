@@ -8,6 +8,9 @@
 #ifndef RPCALC_STACK_H
 #define RPCALC_STACK_H
 
+#define ERR_STACK -20
+#define ERR_STACK_EMPTY -21
+
 /**
  * Simple implementation of a linked stack of integers
  *
@@ -44,12 +47,28 @@ void stack_push(Stack **head, int value);
 int stack_pop(Stack **head);
 
 /**
+ * Reverses the two top values of a stack
+ * 
+ * @param head is the head of the stack
+ */
+void stack_reverse(Stack **head);
+
+/**
  * Prints the value of the stack ;
  * head first, tail last
  *
  * @param head is the head of the stack
  */
 void stack_print(Stack *head);
+
+/**
+ * The size of a stack
+ * 
+ * @param head the head of the stack
+ * 
+ * @return the size of the stack
+ */
+int stack_size(Stack *head);
 
 /**
  * Frees the memory of the stack?

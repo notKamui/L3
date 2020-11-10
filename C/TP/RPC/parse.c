@@ -8,16 +8,16 @@
 
 #include "parse.h"
 
-int *parse_intornull(char *token) {
+int *parse_intornull(char *str) {
     int *ret;
     int i;
 
     ret = (int*)malloc(sizeof(int));
-    *ret = atoi(token);
+    *ret = atoi(str);
 
     if (*ret == 0) {
-        for (i = 0; i < strlen(token); i++) {
-            if (token[i] != '0') {
+        for (i = 0; i < strlen(str); i++) {
+            if (str[i] != '0') {
                 free(ret);
                 return NULL;
             }
