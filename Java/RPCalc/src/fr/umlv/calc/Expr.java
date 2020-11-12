@@ -27,19 +27,33 @@ public sealed interface Expr  {
         }
     }
 
-    sealed interface BinOp extends Expr {
-        @Override
-        default int eval() {
-            return left().eval() + right().eval();
+     sealed abstract class BinOp implements Expr {
+        Expr left;
+        Expr right;
+
+        private BinOp(Expr left, Expr right) {
+            this.left = Objects.requireNonNull(left);
+            this.right = Objects.requireNonNull(right);
         }
 
-        Expr left();
-        Expr right();
+        @Override
+        public int eval() {
+            return op(left.eval(), right.eval());
+        }
 
-        record Add(Expr left, Expr right) implements BinOp {
-            public Add {
-                Objects.requireNonNull(left);
-                Objects.requireNonNull(right);
+        public abstract int op(int a, int b);
+
+        @Override
+        abstract public String toString();
+
+        public static final class Add extends BinOp {
+            public Add(Expr left, Expr right)  {
+                super(left, right);
+            }
+
+            @Override
+            public int op(int a, int b) {
+                return a + b;
             }
 
             @Override
@@ -48,10 +62,14 @@ public sealed interface Expr  {
             }
         }
 
-        record Sub(Expr left, Expr right) implements BinOp {
-            public Sub {
-                Objects.requireNonNull(left);
-                Objects.requireNonNull(right);
+        public static final class Sub extends BinOp {
+            public Sub(Expr left, Expr right)  {
+                super(left, right);
+            }
+
+            @Override
+            public int op(int a, int b) {
+                return a - b;
             }
 
             @Override

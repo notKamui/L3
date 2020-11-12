@@ -82,6 +82,12 @@ int calc_mod(Stack **stack) {
     b = stack_pop(stack);
     a = stack_pop(stack);
 
+    if (b == 0) {
+        stack_push(stack, a);
+        stack_push(stack, b);
+        return ERR_CALC_ZERO_DIVISION;
+    }
+
     stack_push(stack, a % b);
     return 0;
 }

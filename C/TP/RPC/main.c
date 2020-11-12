@@ -31,7 +31,7 @@ void exec(Stack **stack, char *op) {
         } else if (strcmp(op, "^") == 0) {
             errno = calc_pow(stack);
         } else if (strcmp(op, "p") == 0) {
-            printf("%d\n", (*stack)->value);
+            if (*stack != NULL) printf("%d\n", (*stack)->value);
         } else if (strcmp(op, "c") == 0) {
             stack_free(stack);
         } else if (strcmp(op, "a") == 0) {
