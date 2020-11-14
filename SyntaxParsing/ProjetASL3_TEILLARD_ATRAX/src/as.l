@@ -1,6 +1,5 @@
 %{
     #include "as.tab.h"
-    int line = 1;
 %}
 %option nounput
 %option noinput
@@ -10,10 +9,9 @@ ident  [_a-zA-Z][_a-zA-Z0-9]*
 %%
 <LNCOM>\n BEGIN INITIAL;
 <BLCOM>\*\/ BEGIN INITIAL;
-<LNCOM,BLCOM>.|" "|\t|\n ;
+<LNCOM,BLCOM>.|\n ;
 \/\/ BEGIN LNCOM;
 \/\* BEGIN BLCOM;
-
 
 [0-9]+ {
     yylval = atoi(yytext);
@@ -89,13 +87,11 @@ ident  [_a-zA-Z][_a-zA-Z0-9]*
     return VOID;
 }
 
-" "|\t  ;
-
 {ident} {
     return IDENT;
 }
 
-\n ;
+[ \t\n] ;
 
 . {
     return yytext[0];
