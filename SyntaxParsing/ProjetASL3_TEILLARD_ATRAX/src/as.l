@@ -23,6 +23,10 @@ ident  [_a-zA-Z][_a-zA-Z0-9]*
     return CHARACTER;
 }
 
+"struct "{ident} {
+	return STRUCT;
+}
+
 "int"|"char" {
     return TYPE;
 }
@@ -98,6 +102,6 @@ ident  [_a-zA-Z][_a-zA-Z0-9]*
 }
 
 <<EOF>> {
-    return YYEOF;
+    return EOF;
 }
 %%

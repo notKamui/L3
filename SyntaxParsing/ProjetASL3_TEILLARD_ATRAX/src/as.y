@@ -6,10 +6,10 @@
     int yyerror(char *);
     extern int yylineno;
 %}
-%expect 1
 %token CHARACTER
 %token NUM
 %token IDENT
+%token STRUCT
 %token TYPE
 %token EQ
 %token ORDER
@@ -26,25 +26,34 @@
 %token WHILE
 %token RETURN
 %%
-Prog:  DeclVars DeclFoncts 
+Prog:  DeclStructs DeclVars DeclFoncts 
+    ;
+TypeName:
+        STRUCT
+    |   TYPE
     ;
 DeclVars:
-       DeclVars TYPE Declarateurs ';' 
+       DeclVars TypeName Declarateurs ';' 
     |
     ;
 Declarateurs:
        Declarateurs ',' IDENT 
     |  IDENT 
     ;
-DeclFoncts:
-       DeclFoncts DeclFonct 
-    |  DeclFonct 
+DeclStructs:
+       DeclStructs STRUCT '{' CorpsStruct '}' ';'
+	|
     ;
-DeclFonct:
-       EnTeteFonct Corps 
+CorpsStruct:
+       CorpsStruct TypeName Declarateurs ';'
+	|  TypeName Declarateurs ';'
+	;
+DeclFoncts:
+       DeclFoncts EnTeteFonct '{' DeclVars SuiteInstr '}' 
+    |  EnTeteFonct '{' DeclVars SuiteInstr '}' 
     ;
 EnTeteFonct:
-       TYPE IDENT '(' Parametres ')' 
+       TypeName IDENT '(' Parametres ')' 
     |  VOID IDENT '(' Parametres ')' 
     ;
 Parametres:
@@ -52,17 +61,15 @@ Parametres:
     |  ListTypVar 
     ;
 ListTypVar:
-       ListTypVar ',' TYPE IDENT 
-    |  TYPE IDENT 
-    ;
-Corps: '{' DeclVars SuiteInstr '}' 
+       ListTypVar ',' TypeName IDENT 
+    |  TypeName IDENT 
     ;
 SuiteInstr:
        SuiteInstr Instr 
     |
     ;
 Instr:
-       LValue '=' Exp ';'
+       IDENT '=' Exp ';'
     |  READE '(' IDENT ')' ';'
     |  READC '(' IDENT ')' ';'
     |  PRINT '(' Exp ')' ';'
@@ -98,11 +105,8 @@ F   :  ADDSUB F
     |  '(' Exp ')' 
     |  NUM 
     |  CHARACTER
-    |  LValue
+    |  IDENT
     |  IDENT '(' Arguments  ')' 
-    ;
-LValue:
-       IDENT 
     ;
 Arguments:
        ListExp 
