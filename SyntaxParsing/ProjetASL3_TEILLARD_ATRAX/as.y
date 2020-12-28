@@ -33,20 +33,23 @@ TypeName:
     |   TYPE
     ;
 DeclVars:
-       DeclVars Declarateurs ';' 
+       DeclVars TypeName Declarateurs ';' 
     |
     ;
 Declarateurs:
-       Declarateurs ',' TypeName IDENT 
-    |  TypeName IDENT 
+       Declarateurs ',' IDENT 
+    |  IDENT 
     ;
 DeclStructs:
-       DeclStructs STRUCT '{' CorpsStruct '}' ';' 
+       DeclStructs DeclStruct
 	|
     ;
+DeclStruct:
+       STRUCT '{' CorpsStruct '}' ';' 
+    ;
 CorpsStruct:
-       CorpsStruct Declarateurs ';'
-	|  Declarateurs ';'
+       CorpsStruct TypeName Declarateurs ';'
+	|  TypeName Declarateurs ';'
 	;
 DeclFoncts:
        DeclFoncts EnTeteFonct '{' DeclVars SuiteInstr '}' 
@@ -69,7 +72,7 @@ SuiteInstr:
     |
     ;
 Instr:
-       IDENT '=' Exp ';'
+       LValue '=' Exp ';'
     |  READE '(' IDENT ')' ';'
     |  READC '(' IDENT ')' ';'
     |  PRINT '(' Exp ')' ';'
@@ -105,8 +108,11 @@ F   :  ADDSUB F
     |  '(' Exp ')' 
     |  NUM 
     |  CHARACTER
-    |  IDENT
+    |  LValue
     |  IDENT '(' Arguments  ')' 
+    ;
+LValue:
+       IDENT 
     ;
 Arguments:
        ListExp 
