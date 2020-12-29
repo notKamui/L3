@@ -5,8 +5,8 @@
     int yylex();
     int yyerror(char *);
     extern int yylineno;
+    extern char errline[1024];
 %}
-%expect 1
 %token CHARACTER
 %token NUM
 %token IDENT
@@ -28,23 +28,24 @@
 %token RETURN
 %%
 Prog:  
-        DeclStructs DeclVars DeclFoncts 
+        Globals DeclFoncts 
     ;
 TypeName:
         STRUCT IDENT
     |   TYPE
     ;
+Globals:
+       Globals Declarateurs ';' 
+    |  Globals STRUCT IDENT '{' CorpsStruct '}' ';'
+    |
+    ;
 DeclVars:
-       DeclVars Declarateurs ';' 
+       DeclVars Declarateurs ';'
     |
     ;
 Declarateurs:
        Declarateurs ',' IDENT 
     |  TypeName IDENT 
-    ;
-DeclStructs:
-       DeclStructs STRUCT IDENT '{' CorpsStruct '}' ';' 
-	|
     ;
 CorpsStruct:
        CorpsStruct Declarateurs ';'
@@ -131,6 +132,6 @@ ListExp:
     ;
 %%
 int yyerror(char *s){
-    fprintf(stderr, "%s near line %d\n", s, yylineno);
+    fprintf(stderr, "%s near line %d\n%s\n", s, yylineno, errline);
     return 0;
 }

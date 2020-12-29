@@ -10,6 +10,7 @@ struct Ab {
 };
 
 int r1, r2;
+struct Ab s;
 int max;
 
 int main(void) {

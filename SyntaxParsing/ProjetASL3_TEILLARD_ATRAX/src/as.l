@@ -1,5 +1,7 @@
 %{
     #include "as.tab.h"
+
+    char errline[1024];
 %}
 %option nounput
 %option noinput
@@ -96,6 +98,11 @@ ident  [_a-zA-Z][_a-zA-Z0-9]*
 }
 
 [ \t\n] ;
+
+^.*/\n {
+    strcpy(errline, yytext);
+    REJECT;
+}
 
 . {
     return yytext[0];

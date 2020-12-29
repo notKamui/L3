@@ -5,7 +5,7 @@ echo > testoutputs.txt
 
 launch(){
     echo "File: $1" | tee -a testoutputs.txt
-    "./as" < $1
+    "./as" < $1 | cat >> testoutputs.txt
     if [ $? = 0 ]; then
         echo "--> Valid syntax" | tee -a testoutputs.txt
     else
