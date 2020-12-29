@@ -6,6 +6,7 @@
     int yyerror(char *);
     extern int yylineno;
 %}
+%expect 1
 %token CHARACTER
 %token NUM
 %token IDENT
@@ -26,7 +27,8 @@
 %token WHILE
 %token RETURN
 %%
-Prog:  DeclStructs DeclVars DeclFoncts 
+Prog:  
+        DeclStructs DeclVars DeclFoncts 
     ;
 TypeName:
         STRUCT IDENT

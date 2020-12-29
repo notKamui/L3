@@ -8,7 +8,7 @@ as.tab.o: as.tab.c as.tab.h
 	gcc -o as.tab.o -c as.tab.c
 
 as.tab.c as.tab.h: as.y
-	bison -d -v -Wcounterexamples as.y
+	bison -d -v as.y
 
 lex.yy.c: as.l
 	flex as.l

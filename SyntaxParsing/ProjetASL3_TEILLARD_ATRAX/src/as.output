@@ -1,0 +1,1675 @@
+Rules useless in parser due to conflicts
+
+   11 DeclStructs: %empty
+
+
+State 0 conflicts: 3 shift/reduce, 3 reduce/reduce
+State 6 conflicts: 3 shift/reduce, 3 reduce/reduce
+State 7 conflicts: 3 shift/reduce, 3 reduce/reduce
+
+
+Grammar
+
+    0 $accept: Prog $end
+
+    1 Prog: DeclStructs Prog
+    2     | DeclVars Prog
+    3     | DeclFoncts
+
+    4 TypeName: STRUCT IDENT
+    5         | TYPE
+
+    6 DeclVars: DeclVars Declarateurs ';'
+    7         | %empty
+
+    8 Declarateurs: Declarateurs ',' IDENT
+    9             | TypeName IDENT
+
+   10 DeclStructs: DeclStructs STRUCT IDENT '{' CorpsStruct '}' ';'
+   11            | %empty
+
+   12 CorpsStruct: CorpsStruct Declarateurs ';'
+   13            | Declarateurs ';'
+
+   14 DeclFoncts: DeclFoncts EnTeteFonct '{' DeclVars SuiteInstr '}'
+   15           | EnTeteFonct '{' DeclVars SuiteInstr '}'
+
+   16 EnTeteFonct: TypeName IDENT '(' Parametres ')'
+   17            | VOID IDENT '(' Parametres ')'
+
+   18 Parametres: VOID
+   19           | ListTypVar
+
+   20 ListTypVar: ListTypVar ',' TypeName IDENT
+   21           | TypeName IDENT
+
+   22 SuiteInstr: SuiteInstr EntreeInstr
+   23           | %empty
+
+   24 EntreeInstr: OpenInstr
+   25            | CloseInstr
+
+   26 OpenInstr: IF '(' Exp ')' EntreeInstr
+   27          | IF '(' Exp ')' CloseInstr ELSE OpenInstr
+   28          | WHILE '(' Exp ')' OpenInstr
+
+   29 CloseInstr: Instr
+   30           | IF '(' Exp ')' CloseInstr ELSE CloseInstr
+   31           | WHILE '(' Exp ')' CloseInstr
+
+   32 Instr: IDENT '=' Exp ';'
+   33      | READE '(' IDENT ')' ';'
+   34      | READC '(' IDENT ')' ';'
+   35      | PRINT '(' Exp ')' ';'
+   36      | IDENT '(' Arguments ')' ';'
+   37      | RETURN Exp ';'
+   38      | RETURN ';'
+   39      | '{' SuiteInstr '}'
+   40      | ';'
+
+   41 Exp: Exp OR TB
+   42    | TB
+
+   43 TB: TB AND FB
+   44   | FB
+
+   45 FB: FB EQ M
+   46   | M
+
+   47 M: M ORDER E
+   48  | E
+
+   49 E: E ADDSUB T
+   50  | T
+
+   51 T: T DIVSTAR F
+   52  | F
+
+   53 F: ADDSUB F
+   54  | '!' F
+   55  | '(' Exp ')'
+   56  | NUM
+   57  | CHARACTER
+   58  | IDENT
+   59  | IDENT '(' Arguments ')'
+
+   60 Arguments: ListExp
+   61          | %empty
+
+   62 ListExp: ListExp ',' Exp
+   63        | Exp
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '!' (33) 54
+    '(' (40) 16 17 26 27 28 30 31 33 34 35 36 55 59
+    ')' (41) 16 17 26 27 28 30 31 33 34 35 36 55 59
+    ',' (44) 8 20 62
+    ';' (59) 6 10 12 13 32 33 34 35 36 37 38 40
+    '=' (61) 32
+    '{' (123) 10 14 15 39
+    '}' (125) 10 14 15 39
+    error (256)
+    CHARACTER (258) 57
+    NUM (259) 56
+    IDENT (260) 4 8 9 10 16 17 20 21 32 33 34 36 58 59
+    STRUCT (261) 4 10
+    TYPE (262) 5
+    EQ (263) 45
+    ORDER (264) 47
+    ADDSUB (265) 49 53
+    DIVSTAR (266) 51
+    OR (267) 41
+    AND (268) 43
+    VOID (269) 17 18
+    READE (270) 33
+    READC (271) 34
+    PRINT (272) 35
+    IF (273) 26 27 30
+    ELSE (274) 27 30
+    WHILE (275) 28 31
+    RETURN (276) 37 38
+
+
+Nonterminals, with rules where they appear
+
+    $accept (30)
+        on left: 0
+    Prog (31)
+        on left: 1 2 3
+        on right: 0 1 2
+    TypeName (32)
+        on left: 4 5
+        on right: 9 16 20 21
+    DeclVars (33)
+        on left: 6 7
+        on right: 2 6 14 15
+    Declarateurs (34)
+        on left: 8 9
+        on right: 6 8 12 13
+    DeclStructs (35)
+        on left: 10 11
+        on right: 1 10
+    CorpsStruct (36)
+        on left: 12 13
+        on right: 10 12
+    DeclFoncts (37)
+        on left: 14 15
+        on right: 3 14
+    EnTeteFonct (38)
+        on left: 16 17
+        on right: 14 15
+    Parametres (39)
+        on left: 18 19
+        on right: 16 17
+    ListTypVar (40)
+        on left: 20 21
+        on right: 19 20
+    SuiteInstr (41)
+        on left: 22 23
+        on right: 14 15 22 39
+    EntreeInstr (42)
+        on left: 24 25
+        on right: 22 26
+    OpenInstr (43)
+        on left: 26 27 28
+        on right: 24 27 28
+    CloseInstr (44)
+        on left: 29 30 31
+        on right: 25 27 30 31
+    Instr (45)
+        on left: 32 33 34 35 36 37 38 39 40
+        on right: 29
+    Exp (46)
+        on left: 41 42
+        on right: 26 27 28 30 31 32 35 37 41 55 62 63
+    TB (47)
+        on left: 43 44
+        on right: 41 42 43
+    FB (48)
+        on left: 45 46
+        on right: 43 44 45
+    M (49)
+        on left: 47 48
+        on right: 45 46 47
+    E (50)
+        on left: 49 50
+        on right: 47 48 49
+    T (51)
+        on left: 51 52
+        on right: 49 50 51
+    F (52)
+        on left: 53 54 55 56 57 58 59
+        on right: 51 52 53 54
+    Arguments (53)
+        on left: 60 61
+        on right: 36 59
+    ListExp (54)
+        on left: 62 63
+        on right: 60 62
+
+
+State 0
+
+    0 $accept: • Prog $end
+
+    STRUCT  shift, and go to state 1
+    TYPE    shift, and go to state 2
+    VOID    shift, and go to state 3
+
+    STRUCT  [reduce using rule 7 (DeclVars)]
+    STRUCT  [reduce using rule 11 (DeclStructs)]
+    TYPE    [reduce using rule 7 (DeclVars)]
+    TYPE    [reduce using rule 11 (DeclStructs)]
+    VOID    [reduce using rule 7 (DeclVars)]
+    VOID    [reduce using rule 11 (DeclStructs)]
+
+    Prog         go to state 4
+    TypeName     go to state 5
+    DeclVars     go to state 6
+    DeclStructs  go to state 7
+    DeclFoncts   go to state 8
+    EnTeteFonct  go to state 9
+
+
+State 1
+
+    4 TypeName: STRUCT • IDENT
+
+    IDENT  shift, and go to state 10
+
+
+State 2
+
+    5 TypeName: TYPE •
+
+    $default  reduce using rule 5 (TypeName)
+
+
+State 3
+
+   17 EnTeteFonct: VOID • IDENT '(' Parametres ')'
+
+    IDENT  shift, and go to state 11
+
+
+State 4
+
+    0 $accept: Prog • $end
+
+    $end  shift, and go to state 12
+
+
+State 5
+
+   16 EnTeteFonct: TypeName • IDENT '(' Parametres ')'
+
+    IDENT  shift, and go to state 13
+
+
+State 6
+
+    2 Prog: DeclVars • Prog
+    6 DeclVars: DeclVars • Declarateurs ';'
+
+    STRUCT  shift, and go to state 1
+    TYPE    shift, and go to state 2
+    VOID    shift, and go to state 3
+
+    STRUCT  [reduce using rule 7 (DeclVars)]
+    STRUCT  [reduce using rule 11 (DeclStructs)]
+    TYPE    [reduce using rule 7 (DeclVars)]
+    TYPE    [reduce using rule 11 (DeclStructs)]
+    VOID    [reduce using rule 7 (DeclVars)]
+    VOID    [reduce using rule 11 (DeclStructs)]
+
+    Prog          go to state 14
+    TypeName      go to state 15
+    DeclVars      go to state 6
+    Declarateurs  go to state 16
+    DeclStructs   go to state 7
+    DeclFoncts    go to state 8
+    EnTeteFonct   go to state 9
+
+
+State 7
+
+    1 Prog: DeclStructs • Prog
+   10 DeclStructs: DeclStructs • STRUCT IDENT '{' CorpsStruct '}' ';'
+
+    STRUCT  shift, and go to state 17
+    TYPE    shift, and go to state 2
+    VOID    shift, and go to state 3
+
+    STRUCT  [reduce using rule 7 (DeclVars)]
+    STRUCT  [reduce using rule 11 (DeclStructs)]
+    TYPE    [reduce using rule 7 (DeclVars)]
+    TYPE    [reduce using rule 11 (DeclStructs)]
+    VOID    [reduce using rule 7 (DeclVars)]
+    VOID    [reduce using rule 11 (DeclStructs)]
+
+    Prog         go to state 18
+    TypeName     go to state 5
+    DeclVars     go to state 6
+    DeclStructs  go to state 7
+    DeclFoncts   go to state 8
+    EnTeteFonct  go to state 9
+
+
+State 8
+
+    3 Prog: DeclFoncts •
+   14 DeclFoncts: DeclFoncts • EnTeteFonct '{' DeclVars SuiteInstr '}'
+
+    STRUCT  shift, and go to state 1
+    TYPE    shift, and go to state 2
+    VOID    shift, and go to state 3
+
+    $default  reduce using rule 3 (Prog)
+
+    TypeName     go to state 5
+    EnTeteFonct  go to state 19
+
+
+State 9
+
+   15 DeclFoncts: EnTeteFonct • '{' DeclVars SuiteInstr '}'
+
+    '{'  shift, and go to state 20
+
+
+State 10
+
+    4 TypeName: STRUCT IDENT •
+
+    $default  reduce using rule 4 (TypeName)
+
+
+State 11
+
+   17 EnTeteFonct: VOID IDENT • '(' Parametres ')'
+
+    '('  shift, and go to state 21
+
+
+State 12
+
+    0 $accept: Prog $end •
+
+    $default  accept
+
+
+State 13
+
+   16 EnTeteFonct: TypeName IDENT • '(' Parametres ')'
+
+    '('  shift, and go to state 22
+
+
+State 14
+
+    2 Prog: DeclVars Prog •
+
+    $default  reduce using rule 2 (Prog)
+
+
+State 15
+
+    9 Declarateurs: TypeName • IDENT
+   16 EnTeteFonct: TypeName • IDENT '(' Parametres ')'
+
+    IDENT  shift, and go to state 23
+
+
+State 16
+
+    6 DeclVars: DeclVars Declarateurs • ';'
+    8 Declarateurs: Declarateurs • ',' IDENT
+
+    ';'  shift, and go to state 24
+    ','  shift, and go to state 25
+
+
+State 17
+
+    4 TypeName: STRUCT • IDENT
+   10 DeclStructs: DeclStructs STRUCT • IDENT '{' CorpsStruct '}' ';'
+
+    IDENT  shift, and go to state 26
+
+
+State 18
+
+    1 Prog: DeclStructs Prog •
+
+    $default  reduce using rule 1 (Prog)
+
+
+State 19
+
+   14 DeclFoncts: DeclFoncts EnTeteFonct • '{' DeclVars SuiteInstr '}'
+
+    '{'  shift, and go to state 27
+
+
+State 20
+
+   15 DeclFoncts: EnTeteFonct '{' • DeclVars SuiteInstr '}'
+
+    $default  reduce using rule 7 (DeclVars)
+
+    DeclVars  go to state 28
+
+
+State 21
+
+   17 EnTeteFonct: VOID IDENT '(' • Parametres ')'
+
+    STRUCT  shift, and go to state 1
+    TYPE    shift, and go to state 2
+    VOID    shift, and go to state 29
+
+    TypeName    go to state 30
+    Parametres  go to state 31
+    ListTypVar  go to state 32
+
+
+State 22
+
+   16 EnTeteFonct: TypeName IDENT '(' • Parametres ')'
+
+    STRUCT  shift, and go to state 1
+    TYPE    shift, and go to state 2
+    VOID    shift, and go to state 29
+
+    TypeName    go to state 30
+    Parametres  go to state 33
+    ListTypVar  go to state 32
+
+
+State 23
+
+    9 Declarateurs: TypeName IDENT •
+   16 EnTeteFonct: TypeName IDENT • '(' Parametres ')'
+
+    '('  shift, and go to state 22
+
+    $default  reduce using rule 9 (Declarateurs)
+
+
+State 24
+
+    6 DeclVars: DeclVars Declarateurs ';' •
+
+    $default  reduce using rule 6 (DeclVars)
+
+
+State 25
+
+    8 Declarateurs: Declarateurs ',' • IDENT
+
+    IDENT  shift, and go to state 34
+
+
+State 26
+
+    4 TypeName: STRUCT IDENT •
+   10 DeclStructs: DeclStructs STRUCT IDENT • '{' CorpsStruct '}' ';'
+
+    '{'  shift, and go to state 35
+
+    $default  reduce using rule 4 (TypeName)
+
+
+State 27
+
+   14 DeclFoncts: DeclFoncts EnTeteFonct '{' • DeclVars SuiteInstr '}'
+
+    $default  reduce using rule 7 (DeclVars)
+
+    DeclVars  go to state 36
+
+
+State 28
+
+    6 DeclVars: DeclVars • Declarateurs ';'
+   15 DeclFoncts: EnTeteFonct '{' DeclVars • SuiteInstr '}'
+
+    STRUCT  shift, and go to state 1
+    TYPE    shift, and go to state 2
+
+    $default  reduce using rule 23 (SuiteInstr)
+
+    TypeName      go to state 37
+    Declarateurs  go to state 16
+    SuiteInstr    go to state 38
+
+
+State 29
+
+   18 Parametres: VOID •
+
+    $default  reduce using rule 18 (Parametres)
+
+
+State 30
+
+   21 ListTypVar: TypeName • IDENT
+
+    IDENT  shift, and go to state 39
+
+
+State 31
+
+   17 EnTeteFonct: VOID IDENT '(' Parametres • ')'
+
+    ')'  shift, and go to state 40
+
+
+State 32
+
+   19 Parametres: ListTypVar •
+   20 ListTypVar: ListTypVar • ',' TypeName IDENT
+
+    ','  shift, and go to state 41
+
+    $default  reduce using rule 19 (Parametres)
+
+
+State 33
+
+   16 EnTeteFonct: TypeName IDENT '(' Parametres • ')'
+
+    ')'  shift, and go to state 42
+
+
+State 34
+
+    8 Declarateurs: Declarateurs ',' IDENT •
+
+    $default  reduce using rule 8 (Declarateurs)
+
+
+State 35
+
+   10 DeclStructs: DeclStructs STRUCT IDENT '{' • CorpsStruct '}' ';'
+
+    STRUCT  shift, and go to state 1
+    TYPE    shift, and go to state 2
+
+    TypeName      go to state 37
+    Declarateurs  go to state 43
+    CorpsStruct   go to state 44
+
+
+State 36
+
+    6 DeclVars: DeclVars • Declarateurs ';'
+   14 DeclFoncts: DeclFoncts EnTeteFonct '{' DeclVars • SuiteInstr '}'
+
+    STRUCT  shift, and go to state 1
+    TYPE    shift, and go to state 2
+
+    $default  reduce using rule 23 (SuiteInstr)
+
+    TypeName      go to state 37
+    Declarateurs  go to state 16
+    SuiteInstr    go to state 45
+
+
+State 37
+
+    9 Declarateurs: TypeName • IDENT
+
+    IDENT  shift, and go to state 46
+
+
+State 38
+
+   15 DeclFoncts: EnTeteFonct '{' DeclVars SuiteInstr • '}'
+   22 SuiteInstr: SuiteInstr • EntreeInstr
+
+    IDENT   shift, and go to state 47
+    READE   shift, and go to state 48
+    READC   shift, and go to state 49
+    PRINT   shift, and go to state 50
+    IF      shift, and go to state 51
+    WHILE   shift, and go to state 52
+    RETURN  shift, and go to state 53
+    ';'     shift, and go to state 54
+    '{'     shift, and go to state 55
+    '}'     shift, and go to state 56
+
+    EntreeInstr  go to state 57
+    OpenInstr    go to state 58
+    CloseInstr   go to state 59
+    Instr        go to state 60
+
+
+State 39
+
+   21 ListTypVar: TypeName IDENT •
+
+    $default  reduce using rule 21 (ListTypVar)
+
+
+State 40
+
+   17 EnTeteFonct: VOID IDENT '(' Parametres ')' •
+
+    $default  reduce using rule 17 (EnTeteFonct)
+
+
+State 41
+
+   20 ListTypVar: ListTypVar ',' • TypeName IDENT
+
+    STRUCT  shift, and go to state 1
+    TYPE    shift, and go to state 2
+
+    TypeName  go to state 61
+
+
+State 42
+
+   16 EnTeteFonct: TypeName IDENT '(' Parametres ')' •
+
+    $default  reduce using rule 16 (EnTeteFonct)
+
+
+State 43
+
+    8 Declarateurs: Declarateurs • ',' IDENT
+   13 CorpsStruct: Declarateurs • ';'
+
+    ';'  shift, and go to state 62
+    ','  shift, and go to state 25
+
+
+State 44
+
+   10 DeclStructs: DeclStructs STRUCT IDENT '{' CorpsStruct • '}' ';'
+   12 CorpsStruct: CorpsStruct • Declarateurs ';'
+
+    STRUCT  shift, and go to state 1
+    TYPE    shift, and go to state 2
+    '}'     shift, and go to state 63
+
+    TypeName      go to state 37
+    Declarateurs  go to state 64
+
+
+State 45
+
+   14 DeclFoncts: DeclFoncts EnTeteFonct '{' DeclVars SuiteInstr • '}'
+   22 SuiteInstr: SuiteInstr • EntreeInstr
+
+    IDENT   shift, and go to state 47
+    READE   shift, and go to state 48
+    READC   shift, and go to state 49
+    PRINT   shift, and go to state 50
+    IF      shift, and go to state 51
+    WHILE   shift, and go to state 52
+    RETURN  shift, and go to state 53
+    ';'     shift, and go to state 54
+    '{'     shift, and go to state 55
+    '}'     shift, and go to state 65
+
+    EntreeInstr  go to state 57
+    OpenInstr    go to state 58
+    CloseInstr   go to state 59
+    Instr        go to state 60
+
+
+State 46
+
+    9 Declarateurs: TypeName IDENT •
+
+    $default  reduce using rule 9 (Declarateurs)
+
+
+State 47
+
+   32 Instr: IDENT • '=' Exp ';'
+   36      | IDENT • '(' Arguments ')' ';'
+
+    '('  shift, and go to state 66
+    '='  shift, and go to state 67
+
+
+State 48
+
+   33 Instr: READE • '(' IDENT ')' ';'
+
+    '('  shift, and go to state 68
+
+
+State 49
+
+   34 Instr: READC • '(' IDENT ')' ';'
+
+    '('  shift, and go to state 69
+
+
+State 50
+
+   35 Instr: PRINT • '(' Exp ')' ';'
+
+    '('  shift, and go to state 70
+
+
+State 51
+
+   26 OpenInstr: IF • '(' Exp ')' EntreeInstr
+   27          | IF • '(' Exp ')' CloseInstr ELSE OpenInstr
+   30 CloseInstr: IF • '(' Exp ')' CloseInstr ELSE CloseInstr
+
+    '('  shift, and go to state 71
+
+
+State 52
+
+   28 OpenInstr: WHILE • '(' Exp ')' OpenInstr
+   31 CloseInstr: WHILE • '(' Exp ')' CloseInstr
+
+    '('  shift, and go to state 72
+
+
+State 53
+
+   37 Instr: RETURN • Exp ';'
+   38      | RETURN • ';'
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    ';'        shift, and go to state 77
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    Exp  go to state 80
+    TB   go to state 81
+    FB   go to state 82
+    M    go to state 83
+    E    go to state 84
+    T    go to state 85
+    F    go to state 86
+
+
+State 54
+
+   40 Instr: ';' •
+
+    $default  reduce using rule 40 (Instr)
+
+
+State 55
+
+   39 Instr: '{' • SuiteInstr '}'
+
+    $default  reduce using rule 23 (SuiteInstr)
+
+    SuiteInstr  go to state 87
+
+
+State 56
+
+   15 DeclFoncts: EnTeteFonct '{' DeclVars SuiteInstr '}' •
+
+    $default  reduce using rule 15 (DeclFoncts)
+
+
+State 57
+
+   22 SuiteInstr: SuiteInstr EntreeInstr •
+
+    $default  reduce using rule 22 (SuiteInstr)
+
+
+State 58
+
+   24 EntreeInstr: OpenInstr •
+
+    $default  reduce using rule 24 (EntreeInstr)
+
+
+State 59
+
+   25 EntreeInstr: CloseInstr •
+
+    $default  reduce using rule 25 (EntreeInstr)
+
+
+State 60
+
+   29 CloseInstr: Instr •
+
+    $default  reduce using rule 29 (CloseInstr)
+
+
+State 61
+
+   20 ListTypVar: ListTypVar ',' TypeName • IDENT
+
+    IDENT  shift, and go to state 88
+
+
+State 62
+
+   13 CorpsStruct: Declarateurs ';' •
+
+    $default  reduce using rule 13 (CorpsStruct)
+
+
+State 63
+
+   10 DeclStructs: DeclStructs STRUCT IDENT '{' CorpsStruct '}' • ';'
+
+    ';'  shift, and go to state 89
+
+
+State 64
+
+    8 Declarateurs: Declarateurs • ',' IDENT
+   12 CorpsStruct: CorpsStruct Declarateurs • ';'
+
+    ';'  shift, and go to state 90
+    ','  shift, and go to state 25
+
+
+State 65
+
+   14 DeclFoncts: DeclFoncts EnTeteFonct '{' DeclVars SuiteInstr '}' •
+
+    $default  reduce using rule 14 (DeclFoncts)
+
+
+State 66
+
+   36 Instr: IDENT '(' • Arguments ')' ';'
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    $default  reduce using rule 61 (Arguments)
+
+    Exp        go to state 91
+    TB         go to state 81
+    FB         go to state 82
+    M          go to state 83
+    E          go to state 84
+    T          go to state 85
+    F          go to state 86
+    Arguments  go to state 92
+    ListExp    go to state 93
+
+
+State 67
+
+   32 Instr: IDENT '=' • Exp ';'
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    Exp  go to state 94
+    TB   go to state 81
+    FB   go to state 82
+    M    go to state 83
+    E    go to state 84
+    T    go to state 85
+    F    go to state 86
+
+
+State 68
+
+   33 Instr: READE '(' • IDENT ')' ';'
+
+    IDENT  shift, and go to state 95
+
+
+State 69
+
+   34 Instr: READC '(' • IDENT ')' ';'
+
+    IDENT  shift, and go to state 96
+
+
+State 70
+
+   35 Instr: PRINT '(' • Exp ')' ';'
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    Exp  go to state 97
+    TB   go to state 81
+    FB   go to state 82
+    M    go to state 83
+    E    go to state 84
+    T    go to state 85
+    F    go to state 86
+
+
+State 71
+
+   26 OpenInstr: IF '(' • Exp ')' EntreeInstr
+   27          | IF '(' • Exp ')' CloseInstr ELSE OpenInstr
+   30 CloseInstr: IF '(' • Exp ')' CloseInstr ELSE CloseInstr
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    Exp  go to state 98
+    TB   go to state 81
+    FB   go to state 82
+    M    go to state 83
+    E    go to state 84
+    T    go to state 85
+    F    go to state 86
+
+
+State 72
+
+   28 OpenInstr: WHILE '(' • Exp ')' OpenInstr
+   31 CloseInstr: WHILE '(' • Exp ')' CloseInstr
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    Exp  go to state 99
+    TB   go to state 81
+    FB   go to state 82
+    M    go to state 83
+    E    go to state 84
+    T    go to state 85
+    F    go to state 86
+
+
+State 73
+
+   57 F: CHARACTER •
+
+    $default  reduce using rule 57 (F)
+
+
+State 74
+
+   56 F: NUM •
+
+    $default  reduce using rule 56 (F)
+
+
+State 75
+
+   58 F: IDENT •
+   59  | IDENT • '(' Arguments ')'
+
+    '('  shift, and go to state 100
+
+    $default  reduce using rule 58 (F)
+
+
+State 76
+
+   53 F: ADDSUB • F
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    F  go to state 101
+
+
+State 77
+
+   38 Instr: RETURN ';' •
+
+    $default  reduce using rule 38 (Instr)
+
+
+State 78
+
+   55 F: '(' • Exp ')'
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    Exp  go to state 102
+    TB   go to state 81
+    FB   go to state 82
+    M    go to state 83
+    E    go to state 84
+    T    go to state 85
+    F    go to state 86
+
+
+State 79
+
+   54 F: '!' • F
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    F  go to state 103
+
+
+State 80
+
+   37 Instr: RETURN Exp • ';'
+   41 Exp: Exp • OR TB
+
+    OR   shift, and go to state 104
+    ';'  shift, and go to state 105
+
+
+State 81
+
+   42 Exp: TB •
+   43 TB: TB • AND FB
+
+    AND  shift, and go to state 106
+
+    $default  reduce using rule 42 (Exp)
+
+
+State 82
+
+   44 TB: FB •
+   45 FB: FB • EQ M
+
+    EQ  shift, and go to state 107
+
+    $default  reduce using rule 44 (TB)
+
+
+State 83
+
+   46 FB: M •
+   47 M: M • ORDER E
+
+    ORDER  shift, and go to state 108
+
+    $default  reduce using rule 46 (FB)
+
+
+State 84
+
+   48 M: E •
+   49 E: E • ADDSUB T
+
+    ADDSUB  shift, and go to state 109
+
+    $default  reduce using rule 48 (M)
+
+
+State 85
+
+   50 E: T •
+   51 T: T • DIVSTAR F
+
+    DIVSTAR  shift, and go to state 110
+
+    $default  reduce using rule 50 (E)
+
+
+State 86
+
+   52 T: F •
+
+    $default  reduce using rule 52 (T)
+
+
+State 87
+
+   22 SuiteInstr: SuiteInstr • EntreeInstr
+   39 Instr: '{' SuiteInstr • '}'
+
+    IDENT   shift, and go to state 47
+    READE   shift, and go to state 48
+    READC   shift, and go to state 49
+    PRINT   shift, and go to state 50
+    IF      shift, and go to state 51
+    WHILE   shift, and go to state 52
+    RETURN  shift, and go to state 53
+    ';'     shift, and go to state 54
+    '{'     shift, and go to state 55
+    '}'     shift, and go to state 111
+
+    EntreeInstr  go to state 57
+    OpenInstr    go to state 58
+    CloseInstr   go to state 59
+    Instr        go to state 60
+
+
+State 88
+
+   20 ListTypVar: ListTypVar ',' TypeName IDENT •
+
+    $default  reduce using rule 20 (ListTypVar)
+
+
+State 89
+
+   10 DeclStructs: DeclStructs STRUCT IDENT '{' CorpsStruct '}' ';' •
+
+    $default  reduce using rule 10 (DeclStructs)
+
+
+State 90
+
+   12 CorpsStruct: CorpsStruct Declarateurs ';' •
+
+    $default  reduce using rule 12 (CorpsStruct)
+
+
+State 91
+
+   41 Exp: Exp • OR TB
+   63 ListExp: Exp •
+
+    OR  shift, and go to state 104
+
+    $default  reduce using rule 63 (ListExp)
+
+
+State 92
+
+   36 Instr: IDENT '(' Arguments • ')' ';'
+
+    ')'  shift, and go to state 112
+
+
+State 93
+
+   60 Arguments: ListExp •
+   62 ListExp: ListExp • ',' Exp
+
+    ','  shift, and go to state 113
+
+    $default  reduce using rule 60 (Arguments)
+
+
+State 94
+
+   32 Instr: IDENT '=' Exp • ';'
+   41 Exp: Exp • OR TB
+
+    OR   shift, and go to state 104
+    ';'  shift, and go to state 114
+
+
+State 95
+
+   33 Instr: READE '(' IDENT • ')' ';'
+
+    ')'  shift, and go to state 115
+
+
+State 96
+
+   34 Instr: READC '(' IDENT • ')' ';'
+
+    ')'  shift, and go to state 116
+
+
+State 97
+
+   35 Instr: PRINT '(' Exp • ')' ';'
+   41 Exp: Exp • OR TB
+
+    OR   shift, and go to state 104
+    ')'  shift, and go to state 117
+
+
+State 98
+
+   26 OpenInstr: IF '(' Exp • ')' EntreeInstr
+   27          | IF '(' Exp • ')' CloseInstr ELSE OpenInstr
+   30 CloseInstr: IF '(' Exp • ')' CloseInstr ELSE CloseInstr
+   41 Exp: Exp • OR TB
+
+    OR   shift, and go to state 104
+    ')'  shift, and go to state 118
+
+
+State 99
+
+   28 OpenInstr: WHILE '(' Exp • ')' OpenInstr
+   31 CloseInstr: WHILE '(' Exp • ')' CloseInstr
+   41 Exp: Exp • OR TB
+
+    OR   shift, and go to state 104
+    ')'  shift, and go to state 119
+
+
+State 100
+
+   59 F: IDENT '(' • Arguments ')'
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    $default  reduce using rule 61 (Arguments)
+
+    Exp        go to state 91
+    TB         go to state 81
+    FB         go to state 82
+    M          go to state 83
+    E          go to state 84
+    T          go to state 85
+    F          go to state 86
+    Arguments  go to state 120
+    ListExp    go to state 93
+
+
+State 101
+
+   53 F: ADDSUB F •
+
+    $default  reduce using rule 53 (F)
+
+
+State 102
+
+   41 Exp: Exp • OR TB
+   55 F: '(' Exp • ')'
+
+    OR   shift, and go to state 104
+    ')'  shift, and go to state 121
+
+
+State 103
+
+   54 F: '!' F •
+
+    $default  reduce using rule 54 (F)
+
+
+State 104
+
+   41 Exp: Exp OR • TB
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    TB  go to state 122
+    FB  go to state 82
+    M   go to state 83
+    E   go to state 84
+    T   go to state 85
+    F   go to state 86
+
+
+State 105
+
+   37 Instr: RETURN Exp ';' •
+
+    $default  reduce using rule 37 (Instr)
+
+
+State 106
+
+   43 TB: TB AND • FB
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    FB  go to state 123
+    M   go to state 83
+    E   go to state 84
+    T   go to state 85
+    F   go to state 86
+
+
+State 107
+
+   45 FB: FB EQ • M
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    M  go to state 124
+    E  go to state 84
+    T  go to state 85
+    F  go to state 86
+
+
+State 108
+
+   47 M: M ORDER • E
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    E  go to state 125
+    T  go to state 85
+    F  go to state 86
+
+
+State 109
+
+   49 E: E ADDSUB • T
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    T  go to state 126
+    F  go to state 86
+
+
+State 110
+
+   51 T: T DIVSTAR • F
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    F  go to state 127
+
+
+State 111
+
+   39 Instr: '{' SuiteInstr '}' •
+
+    $default  reduce using rule 39 (Instr)
+
+
+State 112
+
+   36 Instr: IDENT '(' Arguments ')' • ';'
+
+    ';'  shift, and go to state 128
+
+
+State 113
+
+   62 ListExp: ListExp ',' • Exp
+
+    CHARACTER  shift, and go to state 73
+    NUM        shift, and go to state 74
+    IDENT      shift, and go to state 75
+    ADDSUB     shift, and go to state 76
+    '('        shift, and go to state 78
+    '!'        shift, and go to state 79
+
+    Exp  go to state 129
+    TB   go to state 81
+    FB   go to state 82
+    M    go to state 83
+    E    go to state 84
+    T    go to state 85
+    F    go to state 86
+
+
+State 114
+
+   32 Instr: IDENT '=' Exp ';' •
+
+    $default  reduce using rule 32 (Instr)
+
+
+State 115
+
+   33 Instr: READE '(' IDENT ')' • ';'
+
+    ';'  shift, and go to state 130
+
+
+State 116
+
+   34 Instr: READC '(' IDENT ')' • ';'
+
+    ';'  shift, and go to state 131
+
+
+State 117
+
+   35 Instr: PRINT '(' Exp ')' • ';'
+
+    ';'  shift, and go to state 132
+
+
+State 118
+
+   26 OpenInstr: IF '(' Exp ')' • EntreeInstr
+   27          | IF '(' Exp ')' • CloseInstr ELSE OpenInstr
+   30 CloseInstr: IF '(' Exp ')' • CloseInstr ELSE CloseInstr
+
+    IDENT   shift, and go to state 47
+    READE   shift, and go to state 48
+    READC   shift, and go to state 49
+    PRINT   shift, and go to state 50
+    IF      shift, and go to state 51
+    WHILE   shift, and go to state 52
+    RETURN  shift, and go to state 53
+    ';'     shift, and go to state 54
+    '{'     shift, and go to state 55
+
+    EntreeInstr  go to state 133
+    OpenInstr    go to state 58
+    CloseInstr   go to state 134
+    Instr        go to state 60
+
+
+State 119
+
+   28 OpenInstr: WHILE '(' Exp ')' • OpenInstr
+   31 CloseInstr: WHILE '(' Exp ')' • CloseInstr
+
+    IDENT   shift, and go to state 47
+    READE   shift, and go to state 48
+    READC   shift, and go to state 49
+    PRINT   shift, and go to state 50
+    IF      shift, and go to state 51
+    WHILE   shift, and go to state 52
+    RETURN  shift, and go to state 53
+    ';'     shift, and go to state 54
+    '{'     shift, and go to state 55
+
+    OpenInstr   go to state 135
+    CloseInstr  go to state 136
+    Instr       go to state 60
+
+
+State 120
+
+   59 F: IDENT '(' Arguments • ')'
+
+    ')'  shift, and go to state 137
+
+
+State 121
+
+   55 F: '(' Exp ')' •
+
+    $default  reduce using rule 55 (F)
+
+
+State 122
+
+   41 Exp: Exp OR TB •
+   43 TB: TB • AND FB
+
+    AND  shift, and go to state 106
+
+    $default  reduce using rule 41 (Exp)
+
+
+State 123
+
+   43 TB: TB AND FB •
+   45 FB: FB • EQ M
+
+    EQ  shift, and go to state 107
+
+    $default  reduce using rule 43 (TB)
+
+
+State 124
+
+   45 FB: FB EQ M •
+   47 M: M • ORDER E
+
+    ORDER  shift, and go to state 108
+
+    $default  reduce using rule 45 (FB)
+
+
+State 125
+
+   47 M: M ORDER E •
+   49 E: E • ADDSUB T
+
+    ADDSUB  shift, and go to state 109
+
+    $default  reduce using rule 47 (M)
+
+
+State 126
+
+   49 E: E ADDSUB T •
+   51 T: T • DIVSTAR F
+
+    DIVSTAR  shift, and go to state 110
+
+    $default  reduce using rule 49 (E)
+
+
+State 127
+
+   51 T: T DIVSTAR F •
+
+    $default  reduce using rule 51 (T)
+
+
+State 128
+
+   36 Instr: IDENT '(' Arguments ')' ';' •
+
+    $default  reduce using rule 36 (Instr)
+
+
+State 129
+
+   41 Exp: Exp • OR TB
+   62 ListExp: ListExp ',' Exp •
+
+    OR  shift, and go to state 104
+
+    $default  reduce using rule 62 (ListExp)
+
+
+State 130
+
+   33 Instr: READE '(' IDENT ')' ';' •
+
+    $default  reduce using rule 33 (Instr)
+
+
+State 131
+
+   34 Instr: READC '(' IDENT ')' ';' •
+
+    $default  reduce using rule 34 (Instr)
+
+
+State 132
+
+   35 Instr: PRINT '(' Exp ')' ';' •
+
+    $default  reduce using rule 35 (Instr)
+
+
+State 133
+
+   26 OpenInstr: IF '(' Exp ')' EntreeInstr •
+
+    $default  reduce using rule 26 (OpenInstr)
+
+
+State 134
+
+   25 EntreeInstr: CloseInstr •
+   27 OpenInstr: IF '(' Exp ')' CloseInstr • ELSE OpenInstr
+   30 CloseInstr: IF '(' Exp ')' CloseInstr • ELSE CloseInstr
+
+    ELSE  shift, and go to state 138
+
+    $default  reduce using rule 25 (EntreeInstr)
+
+
+State 135
+
+   28 OpenInstr: WHILE '(' Exp ')' OpenInstr •
+
+    $default  reduce using rule 28 (OpenInstr)
+
+
+State 136
+
+   31 CloseInstr: WHILE '(' Exp ')' CloseInstr •
+
+    $default  reduce using rule 31 (CloseInstr)
+
+
+State 137
+
+   59 F: IDENT '(' Arguments ')' •
+
+    $default  reduce using rule 59 (F)
+
+
+State 138
+
+   27 OpenInstr: IF '(' Exp ')' CloseInstr ELSE • OpenInstr
+   30 CloseInstr: IF '(' Exp ')' CloseInstr ELSE • CloseInstr
+
+    IDENT   shift, and go to state 47
+    READE   shift, and go to state 48
+    READC   shift, and go to state 49
+    PRINT   shift, and go to state 50
+    IF      shift, and go to state 51
+    WHILE   shift, and go to state 52
+    RETURN  shift, and go to state 53
+    ';'     shift, and go to state 54
+    '{'     shift, and go to state 55
+
+    OpenInstr   go to state 139
+    CloseInstr  go to state 140
+    Instr       go to state 60
+
+
+State 139
+
+   27 OpenInstr: IF '(' Exp ')' CloseInstr ELSE OpenInstr •
+
+    $default  reduce using rule 27 (OpenInstr)
+
+
+State 140
+
+   30 CloseInstr: IF '(' Exp ')' CloseInstr ELSE CloseInstr •
+
+    $default  reduce using rule 30 (CloseInstr)
