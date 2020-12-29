@@ -23,7 +23,7 @@ ident  [_a-zA-Z][_a-zA-Z0-9]*
     return CHARACTER;
 }
 
-"struct "{ident} {
+"struct" {
 	return STRUCT;
 }
 

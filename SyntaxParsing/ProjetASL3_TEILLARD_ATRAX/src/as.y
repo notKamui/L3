@@ -29,7 +29,7 @@
 Prog:  DeclStructs DeclVars DeclFoncts 
     ;
 TypeName:
-        STRUCT
+        STRUCT IDENT
     |   TYPE
     ;
 DeclVars:
@@ -37,11 +37,11 @@ DeclVars:
     |
     ;
 Declarateurs:
-       Declarateurs ',' TypeName IDENT 
+       Declarateurs ',' IDENT 
     |  TypeName IDENT 
     ;
 DeclStructs:
-       DeclStructs STRUCT '{' CorpsStruct '}' ';' 
+       DeclStructs STRUCT IDENT '{' CorpsStruct '}' ';' 
 	|
     ;
 CorpsStruct:
@@ -65,17 +65,28 @@ ListTypVar:
     |  TypeName IDENT 
     ;
 SuiteInstr:
-       SuiteInstr Instr 
+       SuiteInstr EntreeInstr
     |
+    ;
+EntreeInstr:
+        OpenInstr
+    |   CloseInstr
+    ;
+OpenInstr:
+        IF '(' Exp ')' EntreeInstr
+    |   IF '(' Exp ')' CloseInstr ELSE OpenInstr
+    |   WHILE '(' Exp ')' OpenInstr
+    ;
+CloseInstr:
+        Instr
+    |   IF '(' Exp ')' CloseInstr ELSE CloseInstr
+    |   WHILE '(' Exp ')' CloseInstr
     ;
 Instr:
        IDENT '=' Exp ';'
     |  READE '(' IDENT ')' ';'
     |  READC '(' IDENT ')' ';'
     |  PRINT '(' Exp ')' ';'
-    |  IF '(' Exp ')' Instr 
-    |  IF '(' Exp ')' Instr ELSE Instr
-    |  WHILE '(' Exp ')' Instr
     |  IDENT '(' Arguments  ')' ';'
     |  RETURN Exp ';' 
     |  RETURN ';' 

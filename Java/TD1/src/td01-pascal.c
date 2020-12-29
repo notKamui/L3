@@ -7,7 +7,7 @@ int pascal (int nBut, int pBut){
 
    tab = (int *)malloc ((nBut+1)*sizeof(int));
    if(tab==NULL){
-     fprintf(stderr,"Pas assez de place\n");
+     printf(stderr,"Pas assez de place\n");
      exit(0);
    }
 
