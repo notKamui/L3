@@ -1,18 +1,26 @@
-as: lex.yy.o as.tab.o
-	gcc -o as lex.yy.o as.tab.o -Wall -ly -lfl
+as: bin/lex.yy.o bin/as.tab.o
+	gcc -o as bin/lex.yy.o bin/as.tab.o -Wall -ly -lfl
 
-lex.yy.o: lex.yy.c as.tab.h
-	gcc -o lex.yy.o -c lex.yy.c -Wall -ly -lfl
+bin/lex.yy.o: bin/lex.yy.c bin/as.tab.h
+	gcc -o lex.yy.o -c bin/lex.yy.c -Wall -ly -lfl
+	@mkdir -p bin/
+	@mv lex.yy.o bin/
 
-as.tab.o: as.tab.c as.tab.h
-	gcc -o as.tab.o -c as.tab.c -Wall
+bin/as.tab.o: bin/as.tab.c bin/as.tab.h
+	gcc -o as.tab.o -c bin/as.tab.c -Wall
+	@mkdir -p bin/
+	@mv as.tab.o bin/
 
-as.tab.c as.tab.h: as.y
+bin/as.tab.c bin/as.tab.h: as.y
 	bison -d -v as.y
+	@mkdir -p bin/
+	@mv as.tab.c as.tab.h as.output bin/
 
-lex.yy.c: as.l
+bin/lex.yy.c: as.l
 	flex as.l
+	@mkdir -p bin/
+	@mv lex.yy.c bin/
 
 
 clean:
-	rm -f as *.o *.c *.h *.output
+	rm -rf as bin
