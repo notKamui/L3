@@ -30,7 +30,6 @@ ident  [_a-zA-Z][_a-zA-Z0-9]*
 [0-9]+ {
     yylval = atoi(yytext);
     errcharno += yyleng;
-    //printf("%d\n", yyleng);
     return NUM;
 }
 
@@ -134,7 +133,7 @@ ident  [_a-zA-Z][_a-zA-Z0-9]*
     return IDENT;
 }
 
-^.+/"\n" {
+^.*/\n {
     strcpy(errline, yytext);
     REJECT;
 }

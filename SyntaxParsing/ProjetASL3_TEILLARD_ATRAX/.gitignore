@@ -1,0 +1,6 @@
+as
+*.output
+*.c
+*.h
+*.o
+testoutputs.txt
