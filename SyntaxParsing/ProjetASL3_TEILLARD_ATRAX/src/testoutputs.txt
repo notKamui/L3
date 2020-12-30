@@ -1,0 +1,39 @@
+##########Beginning tests##########
+======Valid programs======
+File: ../test/valid/trinome.tpc
+--> Valid syntax
+
+======Invalid programs======
+File: ../test/invalid/trinomebad1.tpc
+syntax error near line 10 at char 1
+it main(void) {
+^
+--> Invalid syntax
+File: ../test/invalid/trinomebad2.tpc
+syntax error near line 27 at char 4
+   return 0;
+   ^
+--> Invalid syntax
+File: ../test/invalid/trinomebad3.tpc
+syntax error near line 36 at char 21
+        r1=(-b+s)/(2a);
+                    ^
+--> Invalid syntax
+File: ../test/invalid/trinomebad4.tpc
+syntax error near line 43 at char 18
+int valeur(int a int b, int c, int x) {
+                 ^
+--> Invalid syntax
+File: ../test/invalid/trinomebad5.tpc
+syntax error near line 27 at char 10
+   retrn 0;
+         ^
+--> Invalid syntax
+File: ../test/invalid/trinomebad6.tpc
+syntax error near line 36 at char 23
+        r1=(-b+s/(2*a);
+                      ^
+--> Invalid syntax
+##########Ending tests##########
+
+7 out of 7 test(s) passed!

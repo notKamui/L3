@@ -1,30 +1,50 @@
 #!/bin/bash
 
 make
-echo > testoutputs.txt
+printf "" > testoutputs.txt
+
+total=0
+passed=0
 
 launch(){
     echo "File: $1" | tee -a testoutputs.txt
-    "./as" < $1 | cat >> testoutputs.txt
+    let total++
+    error=`./as < $1 2>&1`
     if [ $? = 0 ]; then
         echo "--> Valid syntax" | tee -a testoutputs.txt
+        if [ $2 = 0 ]; then
+            let passed++
+        fi
     else
+        printf "$error\n" | tee -a testoutputs.txt
         echo "--> Invalid syntax" | tee -a testoutputs.txt
+        if [ $2 = 1 ]; then
+            let passed++
+        fi
     fi
 }
 
 echo
-echo "##########Beginning tests##########"
+echo "##########Beginning tests##########" | tee -a testoutputs.txt
 echo "======Valid programs======" | tee -a testoutputs.txt
 for file in ../test/valid/*.tpc; do
-    launch $file
+    launch $file 0
 done
 echo | tee -a testoutputs.txt
 echo "======Invalid programs======" | tee -a testoutputs.txt
 for file in ../test/invalid/*.tpc; do
-    launch $file
+    launch $file 1
 done
-echo "##########Ending tests##########"
-echo
+echo "##########Ending tests##########" | tee -a testoutputs.txt
+echo | tee -a testoutputs.txt
+
+if [ $total = $passed ]; then
+    printf "\033[0;32m"
+else
+    printf "\033[0;31m"
+fi
+echo -e "$passed out of $total test(s) passed!" | tee -a testoutputs.txt
+printf "\033[0m"
 
 make clean
+echo -e "\033[0;32mDone! Complete test reports in testoutputs.txt\033[0m"

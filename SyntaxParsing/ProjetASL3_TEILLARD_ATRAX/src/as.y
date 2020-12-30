@@ -5,7 +5,9 @@
     int yylex();
     int yyerror(char *);
     extern int yylineno;
+    extern int yyleng;
     extern char errline[1024];
+    extern int errcharno;
 %}
 %token CHARACTER
 %token NUM
@@ -132,6 +134,11 @@ ListExp:
     ;
 %%
 int yyerror(char *s){
-    fprintf(stderr, "%s near line %d\n%s\n", s, yylineno, errline);
+    int i;
+    fprintf(stderr, "%s near line %d at char %d\n%s\n", s, yylineno, errcharno-yyleng, errline);
+    for (i = 1; i < errcharno-yyleng; i++) {
+        fprintf(stderr, " ");
+    }
+    fprintf(stderr, "^\n");
     return 0;
 }
