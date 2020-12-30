@@ -2,13 +2,20 @@
    #include <math.h> */
 /* int trinome(float a, float b, float c) ;
     double valeur(double a, double b, double c, double x) ; */
-// Résolution d'une équation du deuxième degré 
+// Résolution d'une équation du deuxième degré
 
 int r1, r2;
 int max;
 
+struct point
+
+	int x;
+	int y;
+};
+
 int main(void) {
    int b, c;
+   struct point test;
    b=-1;
    while (b<=1) {
        c=-1;
@@ -33,7 +40,7 @@ int trinome(int a,int b, int c) {
     d=b*b-4*a*c;
     if (d>=0) {
         s=sqrt(d);
-        r1=(-b+s/(2*a);
+        r1=(-b+s)/(2*a);
         r2=(-b-s)/(2*a);
         return 1;
     }

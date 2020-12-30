@@ -4,13 +4,14 @@
     double valeur(double a, double b, double c, double x) ; */
 // Résolution d'une équation du deuxième degré
 
-int r1 r2;
+int r1, r2;
 int max;
 
 struct point{
-
+	
 	int x;
 	int y;
+
 };
 
 int main(void) {
@@ -18,7 +19,7 @@ int main(void) {
    struct point test;
    b=-1;
    while (b<=1) {
-       c=-1;
+       c=*1;
        while (c<=1) {
            print(b);
            if (trinome(1,b,c)) {

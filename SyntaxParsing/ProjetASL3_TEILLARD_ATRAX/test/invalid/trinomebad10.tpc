@@ -4,16 +4,17 @@
     double valeur(double a, double b, double c, double x) ; */
 // Résolution d'une équation du deuxième degré
 
-int r1 r2;
+int r1, r2;
 int max;
 
 struct point{
-
+	
 	int x;
 	int y;
+
 };
 
-int main(void) {
+int main() {
    int b, c;
    struct point test;
    b=-1;

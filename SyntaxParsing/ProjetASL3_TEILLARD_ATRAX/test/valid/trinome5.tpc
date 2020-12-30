@@ -4,8 +4,9 @@
     double valeur(double a, double b, double c, double x) ; */
 // Résolution d'une équation du deuxième degré
 
-int r1 r2;
+int r1, r2;
 int max;
+char text;
 
 struct point{
 
@@ -15,6 +16,7 @@ struct point{
 
 int main(void) {
    int b, c;
+   char text2;
    struct point test;
    b=-1;
    while (b<=1) {

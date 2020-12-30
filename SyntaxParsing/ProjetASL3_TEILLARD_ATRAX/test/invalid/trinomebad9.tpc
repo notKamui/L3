@@ -4,17 +4,19 @@
     double valeur(double a, double b, double c, double x) ; */
 // Résolution d'une équation du deuxième degré
 
-struct Ab {
-    int x;
-    char a;
-};
-
 int r1, r2;
-struct Ab s;
 int max;
 
-int main(void) {
+struct point{
+	
+	int x;
+	int y;
+
+};
+
+int (void) {
    int b, c;
+   struct point test;
    b=-1;
    while (b<=1) {
        c=-1;
