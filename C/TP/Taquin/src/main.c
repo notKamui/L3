@@ -10,7 +10,7 @@ int main() {
 
     width = height = 512;
     image = NULL;
-    
+
     MLV_create_window("Taquin", "taquin", width, height);
 
     printf("menu\n");
