@@ -38,6 +38,7 @@ void stack_reverse(Stack **head) {
     Stack *tmp;
     
     if (stack_size(*head) >= 2) {
+        /* simple swap */
         tmp = (*head)->next;
         (*head)->next = tmp->next;
         tmp->next = *head;
@@ -71,6 +72,7 @@ void stack_free(Stack **head) {
     Stack *tmp;
 
     while (*head != NULL) {
+        /* linked free by swapping */
         tmp = *head;
         *head = (*head)->next;
         free(tmp);
