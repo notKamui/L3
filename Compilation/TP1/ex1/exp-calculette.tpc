@@ -1,0 +1,5 @@
+/* exp-calculette.tpc */
+
+/* Fichier de test pour calculette arithmétique */
+
+    (-2+5)/(2*1)+(101+2-3+6)/(1+2-3+7).
