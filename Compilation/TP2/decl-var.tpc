@@ -1,0 +1,4 @@
+/* decl-var.tpc */
+
+/* Test file for simplified translator of a declaration of variables in C */
+    float r1,b,s,c,r2;
