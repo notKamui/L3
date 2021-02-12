@@ -1,0 +1,9 @@
+<ul>
+  <li (click)="toggleDone(todo)" *ngFor="let todo of todos">
+    <span [ngClass]="{done: todo.done}">{{todo.label}}</span>
+    <button (click)="deleteTodo(todo)">Delete</button>
+  </li>
+</ul>
+
+<input type="textfield" name="newTodo" (keyup)="handleKeyUp($event)" [(ngModel)]="newTodo">
+<button (click)="addNewTodo()">Add new todo</button>

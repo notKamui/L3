@@ -1,0 +1,11 @@
+.done {
+  text-decoration: line-through;
+}
+
+li {
+  cursor: pointer;
+}
+
+span {
+  margin: 0 .5em;
+}
