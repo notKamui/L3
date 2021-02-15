@@ -15,14 +15,16 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
-    if((fd = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IXUSR | S_IROTH)) == -1) {
+    if((fd = open(argv[1], O_RDONLY, S_IRUSR | S_IWUSR | S_IXUSR | S_IROTH)) == -1) {
         printf("Error while opening file, aborting\n");
         return EXIT_FAILURE;
     }
     dup2(fd, STDIN_FILENO);
+    while(scanf("%s", buffer) != -1) {
+        printf("J'ai lu: %s\n", buffer);
+    }
     close(fd);
 
-    scanf("%s", buffer);
 
     return EXIT_SUCCESS;
 }
