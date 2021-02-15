@@ -20,12 +20,14 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
     size = read(fd, buffer, SSIZE_MAX);
+    close(fd);
 
     if((fd = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IXUSR | S_IROTH)) == -1) {
         printf("Error while opening file, aborting\n");
         return EXIT_FAILURE;
     }
     write(fd, buffer, size);
+    close(fd);
 
     return EXIT_SUCCESS;
 }
