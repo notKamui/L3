@@ -133,4 +133,33 @@ fast_exp 2 10;;
 
 (* Exercice 11 *)
 
-let sum1 m n = 1;;
+let sum1 n m =
+    let rec aux1 a acc =
+        if a <= m then
+            let rec aux2 b acc =
+                if b <= m then
+                    aux2 (b+1) (acc+b)
+                else
+                    acc
+            in aux1 (a+1) (aux2 a acc)
+        else
+            acc
+    in aux1 n 0;;
+
+sum1 1 3, sum1 0 10, sum1 5 10, sum1 5 3;;
+
+let sum2 n =
+    let limit = float_of_int n in
+    let rec aux1 j acc =
+        if j <= limit then
+            let rec aux2 k acc =
+                if k < j then
+                    aux2 (k +. 1.) (acc +. k/.j)
+                else
+                    acc
+            in aux1 (j +. 1.) (aux2 0. acc)
+        else
+            acc
+    in aux1 0. 0.;;
+
+sum2 0, sum2 3, sum2 5, sum2 10;;
