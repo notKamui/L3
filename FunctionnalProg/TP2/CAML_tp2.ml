@@ -119,12 +119,12 @@ let exp' x n =
         else aux (i-1) (acc*x)
     in aux n 1;;
 
-let fast_exp x n =
+let rec fast_exp x n =
     if n = 0 then 1
     else if n mod 2 = 0 then
-        let tmp = exp x (n/2)
+        let tmp = fast_exp x (n/2)
         in tmp * tmp
-    else x * (exp x (n-1));;
+    else x * (fast_exp x (n-1));;
 
 
 exp 2 10;;
