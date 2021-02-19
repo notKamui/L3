@@ -1,9 +1,12 @@
-<ul>
-  <li (click)="toggleDone(todo)" *ngFor="let todo of todos">
-    <span [ngClass]="{done: todo.done}">{{todo.label}}</span>
-    <button (click)="deleteTodo(todo)">Delete</button>
-  </li>
-</ul>
+<div class="main">
+  <app-todo-item
+    *ngFor="let todo of todos"
+    [todo]="todo"
+    (editEmitter)="handleEdit($event)"
+    (deleteEmitter)="deleteTodo(todo)"
+  ></app-todo-item>
 
-<input type="textfield" name="newTodo" (keyup)="handleKeyUp($event)" [(ngModel)]="newTodo">
-<button (click)="addNewTodo()">Add new todo</button>
+  <input name="newTodo" (keyup)="handleKeyUp($event)" [(ngModel)]="newTodo" placeholder="New task" required>
+  <input name="description" (keyup)="handleKeyUp($event)" [(ngModel)]="newDescription" placeholder="Description" required>
+  <button class="blue-grey waves-effect waves-light btn" (click)="addNewTodo()">Add new todo</button>
+</div>

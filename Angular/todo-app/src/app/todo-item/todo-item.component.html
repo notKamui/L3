@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col s12 m6">
+    <div class="card" [ngClass]="{'white': todo.done, 'blue-grey darken-1': !todo.done}">
+      <div class="card-content" [ngClass]="{'black-text': todo.done, 'white-text': !todo.done}">
+        <span *ngIf="!isInEditMode" class="card-title">
+          {{todo.label}} <i (click)="toggleEditMode()" class="material-icons">create</i>
+        </span>
+        <input *ngIf="isInEditMode" class="card-title orange-text" name="newLabel" (keyup)="handleKeyUp($event)" [(ngModel)]="todo.label" placeholder="New name" required/>
+        <p *ngIf="!isInEditMode">{{todo.description}}</p>
+        <input *ngIf="isInEditMode" class="orange-text" name="newDescription" (keyup)="handleKeyUp($event)" [(ngModel)]="todo.description" placeholder="New description" required/>
+        <a (click)="deleteSelf()" class="btn-floating halfway-fab waves-effect waves-light"><i class="material-icons">close</i></a>
+      </div>
+      <div class="card-action">
+        <a href="#" (click)="toggleDone()">{{todo.done ? 'Undo' : 'Done'}}</a>
+      </div>
+    </div>
+  </div>
+</div>
