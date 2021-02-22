@@ -25,6 +25,9 @@ class MatriceAdjacence(object):
         >>> G._matrice_adjacence
         [[0, 1], [1, 0]]
         """
+        _max = max(source, destination)+1
+        while _max > self.nombre_sommets():
+            self.ajouter_sommet()
         self._matrice_adjacence[source][destination] = 1
         self._matrice_adjacence[destination][source] = 1
 
@@ -48,57 +51,105 @@ class MatriceAdjacence(object):
         >>> G._matrice_adjacence
         [[0, 0], [0, 0]]
         """
-        new = MatriceAdjacence(self.nombre_sommets()+1)
-        for i in range(0, self.nombre_sommets()+1):
-            for j in range(0, self.nombre_sommets()+1):
-                new[j][i] = self._matrice_adjacence[j][i]
-        self._matrice_adjacence = new._matrice_adjacence
-        return self.nombre_sommets()
+        self._matrice_adjacence.append([0] * len(self._matrice_adjacence))
+        for i in range(len(self._matrice_adjacence)):
+            self._matrice_adjacence[i].append(0)
+        return len(self._matrice_adjacence) - 1
 
     def aretes(self):
         """Renvoie l'ensemble des arêtes du graphe sous forme de couples (si on
         les stocke sous forme de paires, on ne peut pas stocker les boucles,
-        c'est-à-dire les arêtes de la forme (u, u))."""
-        ret = []
-        for i in range(0, len(self._matrice_adjacence)):
-            for j in range(0, len(self._matrice_adjacence)-1-i):
-                if self._matrice_adjacence[j][i] == 1:
-                    ret.append([i, j])
+        c'est-à-dire les arêtes de la forme (u, u)).
+        
+        >>> G = MatriceAdjacence()
+        >>> G.ajouter_aretes([[0,0], [1, 2], [3, 1], [1, 1]])
+        >>> G.aretes()
+        {(1, 2), (1, 3)}
+        """
+        ret = set()
+        for i in range(len(self._matrice_adjacence)):
+            for j in range(len(self._matrice_adjacence)):
+                if self._matrice_adjacence[i][j] == 1 and j > i:
+                    ret.add((i, j))
         return ret
 
     def boucles(self):
         """Renvoie les boucles du graphe, c'est-à-dire les arêtes reliant un
-        sommet à lui-même."""
-        ret = []
-        for i in range(0, len(self._matrice_adjacence)):
+        sommet à lui-même.
+        
+        >>> G = MatriceAdjacence()
+        >>> G.ajouter_aretes([[0,0], [1, 2], [3, 1], [1, 1]])
+        >>> G.boucles()
+        {(1, 1), (0, 0)}
+        """
+        ret = set()
+        for i in range(len(self._matrice_adjacence)):
             if self._matrice_adjacence[i][i] == 1:
-                ret.append([i, i])
+                ret.add((i, i))
         return ret
 
     def contient_arete(self, u, v):
-        """Renvoie True si l'arête {u, v} existe, False sinon."""
-        return self._matrice_adjacence[u][v] == 1
+        """Renvoie True si l'arête {u, v} existe, False sinon.
+        
+        >>> G = MatriceAdjacence()
+        >>> G.ajouter_aretes([[0,0], [1, 2], [3, 1], [1, 1]])
+        >>> G.contient_arete(2, 1)
+        True
+        >>> G.contient_arete(5, 5)
+        False
+        >>> G.contient_arete(1, 0)
+        False
+        """
+        try:
+            return self._matrice_adjacence[u][v] == 1
+        except IndexError:
+            return False
 
     def contient_sommet(self, u):
-        """Renvoie True si le sommet u existe, False sinon."""
+        """Renvoie True si le sommet u existe, False sinon.
+        
+        >>> G = MatriceAdjacence()
+        >>> G.ajouter_aretes([[0,0], [1, 2], [3, 1], [1, 1]])
+        >>> G.contient_sommet(2)
+        True
+        >>> G.contient_sommet(5)
+        False
+        """
         return u < self.nombre_sommets()
 
     def degre(self, sommet):
         """Renvoie le degré d'un sommet, c'est-à-dire le nombre de voisins
-        qu'il possède."""
-        tmp = self._matrice_adjacence[sommet]
-        count = 0
-        for i in range(0, self.nombre_sommets()):
-            if tmp[i] == 1:
-                count += 1
-        return count
+        qu'il possède.
+        
+        >>> G = MatriceAdjacence()
+        >>> G.ajouter_aretes([[0,0], [1, 2], [3, 1], [1, 1]])
+        >>> G.degre(2)
+        1
+        >>> G.degre(5)
+        0
+        """
+        if not self.contient_sommet(sommet):
+            return 0
+        return sum(self._matrice_adjacence[sommet])
 
     def nombre_aretes(self):
-        """Renvoie le nombre d'arêtes du graphe."""
+        """Renvoie le nombre d'arêtes du graphe.
+        
+        >>> G = MatriceAdjacence()
+        >>> G.ajouter_aretes([[0,0], [1, 2], [3, 1], [1, 1]])
+        >>> G.nombre_aretes()
+        2
+        """
         return len(self.aretes())
 
     def nombre_boucles(self):
-        """Renvoie le nombre d'arêtes de la forme {u, u}."""
+        """Renvoie le nombre d'arêtes de la forme {u, u}.
+        
+        >>> G = MatriceAdjacence()
+        >>> G.ajouter_aretes([[0,0], [1, 2], [3, 1], [1, 1]])
+        >>> G.nombre_boucles()
+        2
+        """
         return len(self.boucles())
 
     def nombre_sommets(self):
@@ -112,9 +163,20 @@ class MatriceAdjacence(object):
         return len(self._matrice_adjacence)
 
     def retirer_arete(self, u, v):
-        """Retire l'arête {u, v} si elle existe; provoque une erreur sinon."""
-        if self._matrice_adjacence[v][u] == 0:
-            raise Exception("Cette arête n'existe pas")
+        """Retire l'arête {u, v} si elle existe; provoque une erreur sinon.
+        
+        >>> G = MatriceAdjacence()
+        >>> G.ajouter_aretes([[0,0], [1, 2], [3, 1], [1, 1]])
+        >>> G._matrice_adjacence
+        [[1, 0, 0, 0], [0, 1, 1, 1], [0, 1, 0, 0], [0, 1, 0, 0]]
+        >>> G.retirer_arete(2, 1)
+        >>> G._matrice_adjacence
+        [[1, 0, 0, 0], [0, 1, 0, 1], [0, 0, 0, 0], [0, 1, 0, 0]]
+        >>> G.retirer_arete(5, 5)
+        Traceback (most recent call last):
+        AssertionError: Cette arête n'existe pas
+        """
+        assert self.contient_arete(u, v), "Cette arête n'existe pas"
         self._matrice_adjacence[v][u] = 0
         self._matrice_adjacence[u][v] = 0
 
@@ -127,10 +189,11 @@ class MatriceAdjacence(object):
 
     def retirer_sommet(self, sommet):
         """Déconnecte un sommet du graphe et le supprime."""
-        for i in range(0, self.nombre_sommets()):
-            self.retirer_arete(sommet, i)
-        # TODO
-
+        assert self.contient_sommet(sommet), "Ce sommet n'existe pas"
+        del self._matrice_adjacence[sommet]
+        for i in self._matrice_adjacence:
+            del i[sommet]
+        
 
     def retirer_sommets(self, iterable):
         """Efface les sommets de l'itérable donné du graphe, et retire toutes
@@ -140,11 +203,21 @@ class MatriceAdjacence(object):
 
     def sommets(self):
         """Renvoie l'ensemble des sommets du graphe."""
-        pass  # à compléter
+        return set(range(self.nombre_sommets()))
 
     def sous_graphe_induit(self, iterable):
         """Renvoie le sous-graphe induit par l'itérable de sommets donné."""
-        pass  # à compléter
+        sommets = iterable.copy()
+        sommets.sort()
+        sub = MatriceAdjacence(len(sommets))
+        for i in range(len(sommets)):
+            u = sommets[i]
+            assert self.contient_sommet(u), "Ce sommet n'existe pas"
+            for j in range(i + 1):
+                v = sommets[j]
+                if self.contient_arete(u, v):
+                    sub.ajouter_arete(i, j)
+        return sub
 
     def voisins(self, sommet):
         """Renvoie la liste des voisins d'un sommet."""
@@ -157,8 +230,19 @@ class MatriceAdjacence(object):
 
 
 def export_dot(graphe):
-    """Renvoie une chaîne encodant le graphe au format dot."""
-    return ""  # à compléter
+    """Renvoie une chaîne encodant le graphe au format dot.
+    
+    >>> G = MatriceAdjacence()
+    >>> G.ajouter_aretes([[0,0], [1,2], [3,1], [2,2]])
+
+    >>> export_dot(G)
+    'graph {\\n0;\\n1;\\n2;\\n3;\\n0 -- 0;\\n1 -- 2;\\n1 -- 3;\\n2 -- 2;\\n}'
+    """
+    dot = "graph {\n"
+    dot += ''.join([str(i) + ";\n" for i in graphe.sommets()])
+    dot += ''.join([str(a[0]) + " -- " + str(a[1]) + ";\n" for a in graphe.aretes().union(graphe.boucles())])
+    dot += '}'
+    return dot
 
 
 def main():
