@@ -165,3 +165,22 @@ max_list;; (*int list -> int*)
 max_list [0; 3; 8; 5; 2; 6; 2];;
 max_list [3; 8; 5; 2; 6; 2; 10];;
 
+let nb_max l =
+    if l = [] then raise Empty_list
+    else
+        let rec aux l m count =
+            if l = [] then count
+            else aux (List.tl l) (max m (List.hd l)) (if m > (List.hd l) then count+1 else 1)
+        in aux (List.tl l) (List.hd l) 1;;
+
+nb_max;; (*'a list -> int*)
+nb_max [0; 3; 8; 5; 2; 8; 6; 2];;
+nb_max [3; 8; 5; 10; 10; 2; 6; 2; 10];;
+
+let average l =
+    if l = [] then raise Empty_list
+    else
+        let rec aux l sum =
+            if l = [] then sum
+            else aux (List.tl l) (sum +. (List.hd l))
+        in (aux (List.tl l) (List.hd l)) /. (float_of_int (size l)) ;;
