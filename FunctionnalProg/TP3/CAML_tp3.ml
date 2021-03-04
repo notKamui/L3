@@ -190,3 +190,38 @@ average [0.; 3.; 8.; 5.; 2.; 8.; 6.; 2.];;
 average [3.; 8.; 5.; 10.; 10.; 2.; 6.; 2.; 10.];;
 
 (* Exercice 3 *)
+
+let list_copy l =
+    if l = [] then []
+    else
+        let rec aux l copy =
+            if l = [] then copy
+            else aux (List.tl l) ((List.hd l)::copy)
+        in List.rev (aux l []);;
+
+list_copy;; (*'a list -> 'a list*)
+list_copy [0; 3; 8; 5; 2; 8; 6; 2];;
+list_copy [3; 8; 5; 10; 10; 2; 6; 2; 10];;
+
+let random_list n max =
+    Random.self_init();
+    let rec aux l i =
+        if i >= n then l
+        else aux ((Random.int max)::l) (i+1)
+    in aux [] 0;;
+
+random_list;; (*int -> int -> int list*)
+random_list 0 100;;
+random_list 20 50;;
+
+let reverse l =
+    if l = [] then []
+    else
+        let rec aux l copy =
+            if l = [] then copy
+            else aux (List.tl l) ((List.hd l)::copy)
+        in aux l [];;
+
+reverse;; (*'a list -> 'a list*)
+reverse [0; 3; 8; 5; 2; 8; 6; 2];;
+reverse [3; 8; 5; 10; 10; 2; 6; 2; 10];;
