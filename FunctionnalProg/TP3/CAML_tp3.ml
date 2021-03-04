@@ -184,3 +184,9 @@ let average l =
             if l = [] then sum
             else aux (List.tl l) (sum +. (List.hd l))
         in (aux (List.tl l) (List.hd l)) /. (float_of_int (size l)) ;;
+
+average;; (*float list -> float*)
+average [0.; 3.; 8.; 5.; 2.; 8.; 6.; 2.];;
+average [3.; 8.; 5.; 10.; 10.; 2.; 6.; 2.; 10.];;
+
+(* Exercice 3 *)
