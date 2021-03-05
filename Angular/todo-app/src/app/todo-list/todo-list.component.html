@@ -1,6 +1,6 @@
 <div class="main">
   <app-todo-item
-    *ngFor="let todo of todos"
+    *ngFor="let todo of service.getTodos()"
     [todo]="todo"
     (editEmitter)="handleEdit($event)"
     (deleteEmitter)="deleteTodo(todo)"

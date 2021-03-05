@@ -12,6 +12,7 @@
       </div>
       <div class="card-action">
         <a href="#" (click)="toggleDone()">{{todo.done ? 'Undo' : 'Done'}}</a>
+        <div class="chip">Created: {{ todo.creationDate | customdate:true }}</div>
       </div>
     </div>
   </div>

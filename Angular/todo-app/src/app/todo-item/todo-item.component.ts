@@ -9,10 +9,10 @@ import { Todo } from 'src/model/todo';
 export class TodoItemComponent {
 
   @Input()
-  todo: Todo = { label: '', description: '', done: false };
+  todo: Todo = { id: -1, label: '', description: '', creationDate: Date.now().valueOf(), done: false };
 
   @Output()
-  editEmitter = new EventEmitter<string>();
+  editEmitter = new EventEmitter<Todo>();
 
   @Output()
   deleteEmitter = new EventEmitter<undefined>();
@@ -23,6 +23,7 @@ export class TodoItemComponent {
 
   toggleDone(): void {
     this.todo.done = !this.todo.done;
+    this.editEmitter.emit(this.todo);
   }
 
   toggleEditMode(): void {
@@ -33,7 +34,7 @@ export class TodoItemComponent {
     if (event.key === 'Enter') {
       if (this.todo.label.length <= 0 || this.todo.description.length <= 0) { return; }
       this.toggleEditMode();
-      this.editEmitter.emit('The task ' + this.todo.label + ' has been updated !');
+      this.editEmitter.emit(this.todo);
     }
   }
 
