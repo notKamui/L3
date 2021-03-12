@@ -9,7 +9,7 @@ import { Todo } from 'src/model/todo';
 export class TodoItemComponent {
 
   @Input()
-  todo: Todo = { id: -1, label: '', description: '', creationDate: Date.now().valueOf(), done: false };
+  todo: Todo = { id: '', label: '', creationDate: Date.now().valueOf(), done: false };
 
   @Output()
   editEmitter = new EventEmitter<Todo>();
@@ -32,7 +32,7 @@ export class TodoItemComponent {
 
   handleKeyUp(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
-      if (this.todo.label.length <= 0 || this.todo.description.length <= 0) { return; }
+      if (this.todo.label.length <= 0) { return; }
       this.toggleEditMode();
       this.editEmitter.emit(this.todo);
     }

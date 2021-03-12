@@ -1,12 +1,25 @@
-<div class="main">
+<div *ngIf="!isLoading" class="main">
   <app-todo-item
-    *ngFor="let todo of service.getTodos()"
+    *ngFor="let todo of todos"
     [todo]="todo"
     (editEmitter)="handleEdit($event)"
     (deleteEmitter)="deleteTodo(todo)"
   ></app-todo-item>
 
   <input name="newTodo" (keyup)="handleKeyUp($event)" [(ngModel)]="newTodo" placeholder="New task" required>
-  <input name="description" (keyup)="handleKeyUp($event)" [(ngModel)]="newDescription" placeholder="Description" required>
   <button class="blue-grey waves-effect waves-light btn" (click)="addNewTodo()">Add new todo</button>
+</div>
+
+<div *ngIf="isLoading" class="main">
+  <div class="preloader-wrapper big active">
+    <div class="spinner-layer spinner-blue-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,6 +1,7 @@
 declare var M: any;
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observer } from 'rxjs';
 import { Todo } from '../../model/todo';
 import { TodoService } from '../todo.service';
 
@@ -9,23 +10,47 @@ import { TodoService } from '../todo.service';
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.css']
 })
-export class TodoListComponent {
-
-  service = new TodoService();
+export class TodoListComponent implements OnInit{
+  todos: any = [];
   newTodo = '';
-  newDescription = '';
+  isLoading = false;
+
+  constructor(public service: TodoService) {}
+
+  ngOnInit(): void {
+    this.fetchTodos();
+  }
+
+  fetchTodos(): void {
+    this.isLoading = true;
+    this.service.getTodos().subscribe(res =>
+      this.todos = res
+    );
+    this.isLoading = false;
+  }
 
   addNewTodo(): void {
-    if (this.newTodo.length <= 0 || this.newDescription.length <= 0) { return; }
-    this.service.createTodo(this.newTodo, this.newDescription);
-    M.toast({html: 'The task ' + this.newTodo + ' has been added !'});
+    if (this.newTodo.length <= 0) { return; }
+    this.service.createTodo(this.newTodo).subscribe((res: boolean) => {
+      if (res) {
+        M.toast({html: 'The task ' + this.newTodo + ' has been added !'});
+      } else {
+        M.toast({html: 'The task ' + this.newTodo + ' has failed to be added !'});
+      }
+    });
+    this.fetchTodos();
     this.newTodo = '';
-    this.newDescription = '';
   }
 
   deleteTodo(todo: Todo): void {
-    M.toast({html: 'The task ' + todo.label + ' has been deleted !'});
-    this.service.deleteTodo(todo);
+    this.service.deleteTodo(todo).subscribe((res: boolean) => {
+      if (res) {
+        M.toast({html: 'The task ' + todo.label + ' has been deleted !'});
+      } else {
+        M.toast({html: 'The task ' + todo.label + ' has failed to be deleted !'});
+      }
+    });
+    this.fetchTodos();
   }
 
   handleKeyUp(event: KeyboardEvent): void {
@@ -35,7 +60,13 @@ export class TodoListComponent {
   }
 
   handleEdit(event: Todo): void {
-    this.service.updateTodo(event);
-    M.toast({html: 'The task ' + event.label + ' has been updated !'});
+    this.service.updateTodo(event).subscribe((res: boolean) => {
+      if (res) {
+        M.toast({html: 'The task ' + event.label + ' has been updated !'});
+      } else {
+        M.toast({html: 'The task ' + event.label + ' failed to be updated !'});
+      }
+    });
+    this.fetchTodos();
   }
 }

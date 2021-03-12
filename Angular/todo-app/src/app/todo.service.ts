@@ -1,49 +1,52 @@
 import { Injectable } from '@angular/core';
 import { Todo } from 'src/model/todo';
 
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { TodoResponse } from 'src/model/todoresponse';
+import { UpdateTodo } from 'src/model/updatetodo';
+import { CreateTodo } from 'src/model/createtodo';
+
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
-  todos: Todo[];
+  constructor(private httpClient: HttpClient) {}
 
-  constructor() {
-    if (typeof(Storage) !== 'undefined') {
-      const list = localStorage.getItem('todoapplist');
-      if (list) {
-        this.todos = JSON.parse(list);
-      } else {
-        localStorage.setItem('todoapplist', JSON.stringify([]));
-        this.todos = [];
-      }
-    } else {
-      this.todos = [];
-    }
+  getTodos(): Observable<Todo[]> {
+    return this.httpClient.get<TodoResponse>('https://europe-west1-cours-angular-263913.cloudfunctions.net/todoapp/todo')
+      .pipe(
+        map(response => response.todos)
+      );
   }
 
-  getTodos(): Todo[] {
-    return Array.from(this.todos);
+  createTodo(label: string): Observable<boolean> {
+    return this.httpClient.post<CreateTodo>(
+      'https://europe-west1-cours-angular-263913.cloudfunctions.net/todoapp/todo',
+      { label }
+    ).pipe(
+        map(_ => true),
+        catchError(_ => of(false))
+    );
   }
 
-  createTodo(label: string, description: string): void {
-    this.todos.push({
-      id: Math.floor(Math.random() * 1000),
-      label,
-      description,
-      creationDate: Date.now().valueOf(),
-      done: false
-    });
-    localStorage.setItem('todoapplist', JSON.stringify(this.todos));
+  updateTodo(todo: Todo): Observable<boolean> {
+    return this.httpClient.put<UpdateTodo>(
+      'https://europe-west1-cours-angular-263913.cloudfunctions.net/todoapp/todo/' + todo.id,
+      { label: todo.label, done: todo.done }
+    ).pipe(
+      map(_ => true),
+      catchError(_ => of(false))
+    );
   }
 
-  updateTodo(todo: Todo): void {
-    const i = this.todos.findIndex(t => t.id === todo.id);
-    this.todos[i] = todo;
-    localStorage.setItem('todoapplist', JSON.stringify(this.todos));
-  }
-
-  deleteTodo(todo: Todo): void {
-    this.todos = this.todos.filter(t => t.id !== todo.id);
-    localStorage.setItem('todoapplist', JSON.stringify(this.todos));
+  deleteTodo(todo: Todo): Observable<boolean> {
+    return this.httpClient.delete<boolean>(
+      'https://europe-west1-cours-angular-263913.cloudfunctions.net/todoapp/todo/' + todo.id
+    ).pipe(
+      map(_ => true),
+      catchError(_ => of(false))
+    );
   }
 }
