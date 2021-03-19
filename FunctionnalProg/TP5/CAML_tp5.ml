@@ -113,3 +113,36 @@ ordered (fun x y -> x + y >= 1) [1; 4; -3; 6];;
 
 let filter2 p a b = List.rev (List.fold_left2 (fun acc n1 n2 -> if p n1 n2 then (n1, n2)::acc else acc) [] a b);;
 filter2 (<) [2; 2; 3] [1; 4; 5];;
+
+(* Exercice 6 *)
+type bintree = 
+    | Empty
+    | Node of int * bintree * bintree;;
+
+let example_tree =
+    Node(1,
+        Node(2, Node(4, Empty, Empty),
+            Node(5, Node(7, Empty, Empty), Node(8, Empty, Empty))),
+        Node(3, Empty, Node(6, Node(9, Empty, Empty), Empty)));;
+
+let rec map_tree f t = match t with
+    | Empty -> Empty
+    | Node(value, left, right) -> Node(f value, map_tree f left, map_tree f right);;
+
+let rec fold_tree f t s = match t with
+    | Empty -> s
+    | Node(value, left, right) -> 
+        let leftV = fold_tree f left s and rightV = fold_tree f right s in
+        f value leftV rightV;;
+
+fold_tree (fun acc a b -> acc+a+b) example_tree 0;;
+fold_tree (fun acc a b -> acc*a*b) example_tree 1;;
+
+
+let bintree_count_nodes t = fold_tree (fun acc a b -> acc + a + b) t 0;;
+
+(*let bintree_collect_nodes t = fold_tree (fun acc next -> next::acc) t [];;*)
+(* puisque fold_tree prend un (int -> int -> int), je ne vois pas quel genre de lambda je peux donner, sachant qu'un fold "normal" prendrai celle ci dessus *)
+
+map_tree (fun x -> x * 2) example_tree;;
+bintree_count_nodes example_tree;;
