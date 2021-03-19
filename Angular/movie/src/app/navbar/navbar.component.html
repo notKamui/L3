@@ -1,0 +1,15 @@
+<nav>
+  <div class="nav-wrapper">
+    <div class="input-field">
+      <i class="material-icons prefix">search</i>
+      <input
+        name="search"
+        id="search"
+        type="text"
+        (keyup.enter)="emitSearchValue()"
+        [(ngModel)]="search"
+        placeholder="Rentrer un nom de film puis entrée pour rechercher"
+      />
+    </div>
+  </div>
+</nav>
