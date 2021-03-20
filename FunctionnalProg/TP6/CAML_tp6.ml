@@ -22,7 +22,7 @@ let tree_list_leaves t =
         | Leaf(value) -> [value]
         | Node (_, children) -> List.fold_left (fun acc next -> List.append acc (aux next acc)) [] children
     in aux t [];;
-    
+
 
 tree_count_nodes example_tree;;
 tree_list_leaves example_tree;;
@@ -58,17 +58,13 @@ type fs_item = FolderItem of fs_folder * fs_item list
 
 (* Part 3 *)
 
-let files fs = 
-    let rec aux curr acc = match curr with
-        | FileItem(file) -> [file]
-        | FolderItem(_, children) -> List.fold_left (fun acc next -> List.append acc (aux next acc)) [] children
-    in aux fs [];;
+let rec files fs = match fs with
+    | FileItem(file) -> [file]
+    | FolderItem(_, children) -> List.fold_left (fun acc next -> List.append acc (files next)) [] children;;
 
-let folders fs =
-    let rec aux curr acc = match curr with
-        | FileItem(_) -> []
-        | FolderItem(self, children) -> self::(List.fold_left (fun acc next -> (List.append acc (aux next acc))) [] children)
-    in aux fs [];;
+let rec folders fs = match fs with
+    | FileItem(_) -> []
+    | FolderItem(self, children) -> self::(List.fold_left (fun acc next -> (List.append acc (folders next))) [] children);;
 
 let rec ftype_pred file types =
     match file with
