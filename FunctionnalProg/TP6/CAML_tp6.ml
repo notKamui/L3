@@ -104,8 +104,8 @@ let not_rec_search_list list name =
 
 #use "tp6_exemple.ml";;
 
-files my_fs2;;
-folders my_fs2;;
+files my_fs;;
+folders my_fs;;
 
 print_string "is_image test1, is_image test2, is_image test3;;";;
 is_image test1, is_image test2, is_image test3;;
