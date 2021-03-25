@@ -103,3 +103,70 @@ UPDATE stocke SET prixunit = 10.00 WHERE idmag = 44 AND idpro = 193;
 SELECT * FROM historiquePrix;
 UPDATE stocke SET prixunit = 0.50 WHERE idmag = 44 AND idpro = 193;
 SELECT * FROM historiquePrix;
+
+/* EXERCICE 3 */
+
+DROP TRIGGER IF EXISTS majFid ON contient;
+DROP FUNCTION IF EXISTS majFid_fun;
+
+CREATE OR REPLACE FUNCTION majFid_fun()
+RETURNS TRIGGER AS
+$$
+    DECLARE
+		res record;
+    BEGIN
+		SELECT prixunit, quantite, numcli, idmag INTO res
+		FROM contient NATURAL JOIN facture
+		WHERE idfac = NEW.idfac AND idpro = NEW.idpro;
+
+		PERFORM * FROM fidelite
+		WHERE numcli = res.numcli AND idmag = res.idmag;
+		IF NOT FOUND THEN
+			RAISE NOTICE 'Client n% aurait pu gagner % points', res.numcli, res.prixunit*res.quantite;
+		ELSE
+			RAISE NOTICE 'Client n% a gagné % points', res.numcli, res.prixunit*res.quantite;
+			UPDATE fidelite
+			SET points = points + (res.prixunit * res.quantite)
+			WHERE numcli = res.numcli AND idmag = res.idmag;
+		END IF;
+
+		RETURN NEW;
+    END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER majFid
+AFTER INSERT ON contient
+FOR EACH ROW
+EXECUTE PROCEDURE majFid_fun();
+
+SELECT * FROM fidelite WHERE numcli = 26 AND idmag = 85;
+INSERT INTO contient VALUES (8, 192, 10, 5);
+SELECT * FROM fidelite WHERE numcli = 26 AND idmag = 85;
+
+
+
+DROP TRIGGER IF EXISTS ceilFid ON fidelite;
+DROP FUNCTION IF EXISTS ceilFid;
+
+CREATE OR REPLACE FUNCTION ceilFid_fun()
+RETURNS TRIGGER AS
+$$
+    BEGIN
+		RAISE NOTICE 'Plafond à 1000 atteint par la carte n%', NEW.numcarte;
+		NEW.points = 1000;
+
+		RETURN NEW;
+    END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER ceilFid
+BEFORE UPDATE OR INSERT ON fidelite
+FOR EACH ROW
+WHEN (NEW.points > 1000)
+EXECUTE PROCEDURE ceilFid_fun();
+
+SELECT * FROM fidelite WHERE numcli = 26 AND idmag = 85;
+INSERT INTO contient VALUES (8, 10, 100, 100);
+SELECT * FROM fidelite WHERE numcli = 26 AND idmag = 85;
