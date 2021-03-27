@@ -5,7 +5,11 @@
         <span *ngIf="!isInEditMode" class="card-title">
           {{todo.label}} <i (click)="toggleEditMode()" class="material-icons">create</i>
         </span>
-        <input *ngIf="isInEditMode" class="card-title orange-text" name="newLabel" (keyup)="handleKeyUp($event)" [(ngModel)]="todo.label" placeholder="New name" required/>
+        <app-todo-form
+          *ngIf="isInEditMode"
+          (todoNameEmitter)="handleEdit($event)"
+          [buttonMessage]="'Confirmer'"
+        ></app-todo-form>
         <p>No Description Yet</p>
         <a (click)="deleteSelf()" class="btn-floating halfway-fab waves-effect waves-light"><i class="material-icons">close</i></a>
       </div>

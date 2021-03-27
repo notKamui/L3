@@ -8,13 +8,15 @@ import { AppComponent } from './app.component';
 import { TodoListComponent } from './todo-list/todo-list.component';
 import { TodoItemComponent } from './todo-item/todo-item.component';
 import { CustomDatePipe } from './custom-date.pipe';
+import { TodoFormComponent } from './todo-form/todo-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TodoListComponent,
     TodoItemComponent,
-    CustomDatePipe
+    CustomDatePipe,
+    TodoFormComponent
   ],
   imports: [
     BrowserModule,

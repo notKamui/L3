@@ -1,0 +1,30 @@
+<form (ngSubmit)="sendNewTodo()" #todoForm="ngForm">
+  <span>{{ computedLength() }}</span>
+  <input
+    #todoNameField="ngModel"
+    name="todoName"
+    (keyup.enter)="sendNewTodo()"
+    [(ngModel)]="todoName"
+    placeholder="New task"
+    required
+    minlength="4"
+    maxlength="20"
+    pattern="[a-zA-Z0-9 ]*"
+    class="validate"
+  >
+
+  <div *ngIf="todoNameField.dirty && todoNameField.errors != null">
+    <ul>
+      <li *ngIf="todoNameField.errors.required">Ce champs est requis</li>
+      <li *ngIf="todoNameField.errors.pattern">Ce champs ne respecte pas le format attendu</li>
+      <li *ngIf="todoNameField.errors.maxlength">Ce champs dépasse le nombre de caractères autorisés</li>
+      <li *ngIf="todoNameField.errors.pattern">Ce champs ne respecte pas la taille minimum requise</li>
+    </ul>
+  </div>
+
+  <button
+    type="submit"
+    [disabled]="todoForm.invalid"
+    class="blue-grey waves-effect waves-light btn"
+  >{{ buttonMessage }}</button>
+</form>
