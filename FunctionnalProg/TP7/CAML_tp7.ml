@@ -2,6 +2,7 @@
 #require "graphics";;
 
 open Graphics;;
+open Float;;
 
 (* Type for the representation of functional images. *)
 type picture  = int * int -> color
@@ -86,6 +87,39 @@ let compose pics: picture =
             | head::tail -> aux tail (compose_two res head)
     in aux pics (fun _ -> background)
 
+let rotate pic theta: picture = fun (x, y) ->
+    let xf = float_of_int x and yf = float_of_int y in
+    let c = cos theta and s = sin theta in
+    pic(
+        int_of_float ((xf *. c) -. (yf *. s)),
+        int_of_float ((yf *. c) -. (xf *. s))
+    )
+
+let sun color: picture =
+    let beam = move (rectangle 3 30 color) (1, -50)
+    and body = disk 30 color in
+    compose [
+        beam;
+        rotate beam (pi /. 2.);
+        rotate beam (pi);
+        rotate beam (pi /. 2. *. 3.);
+        body
+    ]
+
+let compose_xor_two pic1 pic2: picture = fun (x, y) ->
+    if pic1(x, y) != background && pic2(x, y) != background then background
+    else if pic1(x, y) != background then pic1(x, y)
+    else if pic2(x, y) != background then pic2(x, y)
+    else background
+
+let double_concentric width: picture =
+    let c = concentric black width in
+    compose_xor_two (move c (50, 0)) (move c (-50, 0))
+
+let rosace: picture =
+    let d = double_concentric 30 in
+    compose_xor_two d (rotate d (pi /. 2.))
+
 ;;
 
 (*
@@ -128,6 +162,12 @@ let mickey =
     and nose = disk 10 black in
     let half = compose [ear; headBorder; eye; nose] in
     let full = compose [head; half; (horizontal_symmetry half)] in
-    move full (-(w/2), -(h/2));;
+    move (rotate full (pi /. 2.)) (-(w/2), -(h/2));;
 
 render mickey;;
+
+render (move (sun yellow) (-(w/2), -(h/2)));;
+
+render (move (double_concentric 20) (-(w/2), -(h/2)));;
+
+render (move rosace (-(w/2), -(h/2)));;
