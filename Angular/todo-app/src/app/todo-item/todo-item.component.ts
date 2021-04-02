@@ -37,6 +37,7 @@ export class TodoItemComponent {
   handleEdit(todoName: string): void {
     this.toggleEditMode();
     this.todo.label = todoName;
+    this.editEmitter.emit(this.todo);
   }
 
   deleteSelf(): void {

@@ -14,7 +14,7 @@
         <a (click)="deleteSelf()" class="btn-floating halfway-fab waves-effect waves-light"><i class="material-icons">close</i></a>
       </div>
       <div class="card-action">
-        <a href="#" (click)="toggleDone()">{{todo.done ? 'Undo' : 'Done'}}</a>
+        <a (click)="toggleDone()">{{todo.done ? 'Undo' : 'Done'}}</a>
         <div class="chip">Created: {{ todo.creationDate | customdate:true }}</div>
       </div>
     </div>
