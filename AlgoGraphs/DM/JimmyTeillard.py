@@ -172,37 +172,83 @@ class Tas(object):
             min_node.right = None
             return min_node.value
 
+    def est_vide(self):
+        return self.root is None
+
 
 class UnionFind(object):
     """Implémentation de la structure de données Union-Find."""
 
     def __init__(self, ensemble):
         """Initialisation des structures de données nécessaires."""
-        pass  # à compléter
+        self.root = dict()
+        for e in ensemble:
+            self.root[e] = e
 
     def find(self, element):
         """Renvoie le numéro de la classe à laquelle appartient l'élément."""
-        pass  # à compléter
+        while element != self.root[element]:
+            element = self.root[element]
+        return element
 
     def union(self, premier, second):
         """Fusionne les classes contenant les deux éléments donnés."""
-        pass  # à compléter
+        rootA = self.find(premier)
+        rootB = self.find(second)
+        if rootA != rootB:
+            self.root[rootA] = rootB
 
 
-def main():
-    heap = Tas()
-    heap.inserer(50)
-    heap.inserer(30)
-    heap.inserer(20)
-    heap.inserer(40)
-    heap.inserer(70)
-    heap.inserer(60)
-    heap.inserer(80)
-    print(heap.extraire_minimum())
-    print(heap.extraire_minimum())
-    print(heap.extraire_minimum())
-    print(heap.extraire_minimum())
+def stocker_arete_valide(G, u, S, hors_arbre):
+    for (v, p) in G.voisins(u):
+        if hors_arbre[v]:
+            S.inserer((p, u, v))
 
 
-if __name__ == "__main__":
-    main()
+def extraire_arete_sure(S, hors_arbre):
+    while not S.est_vide():
+        (p, u, v) = S.extraire_minimum()
+        if hors_arbre[u] != hors_arbre[v]:
+            return (u, v, p)
+    return (None, None, -1)
+
+
+def acpm_prim(G, depart):
+    A = type(G)()
+    A.ajouter_sommet(depart)
+    hors_arbre = {}
+    for s in G.sommets():
+        hors_arbre[s] = True
+    hors_arbre[depart] = False
+    candidates = Tas()
+    stocker_arete_valide(G, depart, candidates, hors_arbre)
+    while A.nombre_aretes() < G.nombre_sommets() - 1:
+        (u, v, p) = extraire_arete_sure(candidates, hors_arbre)
+        if u is None:
+            return A
+        if not hors_arbre[u]:
+            u, v = v, u
+        A.ajouter_arete(u, v, p)
+        hors_arbre[u] = False
+        stocker_arete_valide(G, u, candidates, hors_arbre)
+    return A
+
+
+def fcpm_prim(G):
+    F = type(G)()
+    S = list(G.sommets())
+    while len(S) > 0:
+        A = acpm_prim(G, S[0])
+        F.ajouter_aretes(A.aretes())
+        S = list(set(S) - A.sommets())
+    return F
+
+
+def acpm_kruskal(G):
+    F = type(G)()
+    C = UnionFind(G.sommets())
+    for (u, v, p) in sorted(G.aretes(), key=lambda tup: tup[2]):
+        if C.find(u) != C.find(v):
+            F.ajouter_arete(u, v, p)
+            C.union(C.find(u), C.find(v))
+    return F

@@ -120,3 +120,92 @@ class Graphe(object):
     def voisins(self, sommet):
         """Renvoie l'ensemble des voisins du sommet donné."""
         return self.dictionnaire[sommet]
+
+
+class Tas(object):
+    """Implémentation de la structure de données Tas."""
+    class Node(object):
+        def __init__(self, value):
+            self.value = value
+            self.left = None
+            self.right = None
+
+    def __init__(self):
+        """Initialisation des structures de données nécessaires."""
+        self.root = None
+
+    def _rec_insert(self, node, value):
+        if node is None:
+            return self.Node(value)
+        else:
+            if value <= node.value:
+                node.left = self._rec_insert(node.left, value)
+            else:
+                node.right = self._rec_insert(node.right, value)
+        return node
+
+    def inserer(self, element):
+        """Insère un élément dans le tas en préservant la structure."""
+        if (self.root is None):
+            self.root = self.Node(element)
+        else:
+            self._rec_insert(self.root, element)
+
+    def _rec_remove_min(self, node):
+        if node.left.left is None:
+            min_node = node.left
+            node.left = node.left.right
+            min_node.right = None
+            return min_node
+        else:
+            return self._rec_remove_min(node.left)
+
+    def extraire_minimum(self):
+        """Extrait et renvoie le minimum du tas en préservant sa structure."""
+        if self.root is None:
+            return None
+        elif self.root.left is not None:
+            return self._rec_remove_min(self.root).value
+        else:
+            min_node = self.root
+            self.root = self.root.right
+            min_node.right = None
+            return min_node.value
+
+    def est_vide(self):
+        return self.root is None
+
+
+def stocker_arete_valide(G, u, S, hors_arbre):
+    for (v, p) in G.voisins(u):
+        if hors_arbre[v]:
+            S.inserer((p, u, v))
+
+
+def extraire_arete_sure(S, hors_arbre):
+    while not S.est_vide():
+        (p, u, v) = S.extraire_minimum()
+        if hors_arbre[u] != hors_arbre[v]:
+            return (u, v, p)
+    return (None, None, -1)
+
+
+def acpm_prim(G, depart):
+    A = type(G)()
+    A.ajouter_sommet(depart)
+    hors_arbre = {}
+    for s in G.sommets():
+        hors_arbre[s] = True
+    hors_arbre[depart] = False
+    candidates = Tas()
+    stocker_arete_valide(G, depart, candidates, hors_arbre)
+    while A.nombre_aretes() < G.nombre_sommets() - 1:
+        (u, v, p) = extraire_arete_sure(candidates, hors_arbre)
+        if u is None:
+            return A
+        if not hors_arbre[u]:
+            u, v = v, u
+        A.ajouter_arete(u, v, p)
+        hors_arbre[u] = False
+        stocker_arete_valide(G, u, candidates, hors_arbre)
+    return A
