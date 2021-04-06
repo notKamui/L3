@@ -1,3 +1,12 @@
+let memo f =
+    let m = ref [] in
+    fun x ->
+        try List.assoc x !m
+        with Not_found ->
+            let y = f x in
+            m := (x, y) :: !m;
+            y
+
 (**********************************************************************)
 (***************************** Exercice 1 *****************************)
 (**********************************************************************)
@@ -52,6 +61,16 @@ let rec is_subword_lists sub lst =
 
 (* 1.7. *)
 (* val is_duplicate_free : 'a list -> bool = <fun> *)
+exception Found
+let is_duplicate_free lst =
+    let hash = Hashtbl.create (List.length lst) in
+    try (
+        List.iter (fun el ->
+            if (Hashtbl.mem hash el) then (raise Found)
+            else (Hashtbl.add hash el true)
+        ) lst;
+        true
+    ) with Found -> false
 
 (**********************************************************************)
 (***************************** Exercice 2 *****************************)
@@ -73,7 +92,7 @@ let get_value atm idx = atm.ribbon idx
 
 (* 2.3. *)
 (* val set_value : 'a automaton -> int -> 'a -> 'a automaton = <fun> *)
-let set_value atm idx value = { auto with ribbon = (fun i -> if idx = i then value else atm.ribbon i); }
+let set_value atm idx value = { atm with ribbon = (fun i -> if idx = i then value else atm.ribbon i); }
 
 (**********************************************************************)
 (***************************** Exercice 3 *****************************)
@@ -109,53 +128,88 @@ let has_subword atm bnc sub = is_subword_lists sub (get_bunch_values atm bnc)
 
 (* 4.1. *)
 (* val shift : 'a automaton -> int -> 'a automaton = <fun> *)
-let shift atm k = { auto with ribbon = (fun i -> atm.ribbon (i + k)); }
+let shift atm k = { atm with ribbon = (fun i -> atm.ribbon (i + k)); }
 
 (* 4.2. *)
 (* val mirror : 'a automaton -> 'a automaton = <fun> *)
+let mirror atm = { atm with ribbon = (fun i -> atm.ribbon (-i)) }
 
 (* 4.3. *)
 (* val map : 'a automaton -> ('a -> 'a) -> 'a automaton = <fun> *)
+let map atm transform = { atm with ribbon = (fun i -> transform (atm.ribbon i)) }
 
 (* 4.4. *)
 (* val evolution : 'a automaton -> 'a automaton = <fun> *)
+let evolution atm = { atm with ribbon = (fun i -> atm.evol ((atm.ribbon (i-1)), (atm.ribbon i), (atm.ribbon (i+1)))) }
 
 (* 4.5. *)
 (* val evolutions : 'a automaton -> int -> 'a automaton list = <fun> *)
+let evolutions atm n = compose_iter evolution atm n
 
 (* 4.6. *)
-(* val evolutions_bunch : 'a automaton -> bunch -> int -> 'a list list
-    = <fun> *)
+(* val evolutions_bunch : 'a automaton -> bunch -> int -> 'a list list = <fun> *)
+let evolutions_bunch atm bnc n = List.map (fun it -> get_bunch_values it bnc) (evolutions atm n)
 
 (* 4.7. *)
 (* val is_resurgent : 'a automaton -> bunch -> int -> bool *)
+let is_resurgent atm bnc n = not (is_duplicate_free (evolutions_bunch atm bnc n))
 
 (**********************************************************************)
 (***************************** Exercice 5 *****************************)
 (**********************************************************************)
 
 (* 5.1. *)
-(* val sierpinski : int automaton
-    = {ribbon = <fun>; evol = <fun>; void = 0} *)
+(* val sierpinski : int automaton = {ribbon = <fun>; evol = <fun>; void = 0} *)
+let sierpinski = create (fun (a, b, c) -> (a + b + c) mod 2) 0
 
 (* 5.2. *)
 (* Type wb. *)
-(* val chaos : wb automaton
-    = {ribbon = <fun>; evol = <fun>; void = White} *)
+(* val chaos : wb automaton = {ribbon = <fun>; evol = <fun>; void = White} *)
+type wb = White | Black
+let chaos = create (fun (a, b, c) ->
+    match a with
+    | White -> (
+        match b with
+        | White -> (
+            match c with
+            | White -> White
+            | Black -> Black
+        )
+        | Black -> (
+            match c with
+            | White -> Black
+            | Black -> Black
+        )
+    )
+    | Black -> (
+        match b with
+        | White -> (
+            match c with
+            | White -> Black
+            | Black -> White
+        )
+        | Black -> (
+            match c with
+            | White -> White
+            | Black -> White
+        )
+    )
+) White
 
 (**********************************************************************)
 (***************************** Exercice 6 *****************************)
 (**********************************************************************)
 
-(* 6.1. *)
-
-(* 6.2. *)
-
 ;;
 
-let aut1 = create (fun (a, b, c) -> a + b + c) 0;;
-let aut1 = set_value aut1 3 4;;
-let aut1 = set_value aut1 (-1) 2;;
-let aut1 = set_value aut1 5 9;;
-has_subword aut1 (1, 8) [4; 9];;
-has_subword aut1 (7, 8) [4; 9];;
+(* 6.1. *)
+let aut =  set_value sierpinski 0 1;;
+evolutions aut 16;;
+(*print_string (String.concat "\n"
+    (List.map (fun a ->
+        to_string a (-8, 8) string_of_int
+    ) (evolutions aut 16))
+);;*)
+(* Trop long et couteux car calcul a chaque fois *)
+
+(* 6.2. *)
