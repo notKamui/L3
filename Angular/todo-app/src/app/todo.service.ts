@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Todo } from 'src/model/todo';
 
 import { Observable, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError, map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import { TodoResponse } from 'src/model/todoresponse';
 import { UpdateTodo } from 'src/model/updatetodo';
 import { CreateTodo } from 'src/model/createtodo';
