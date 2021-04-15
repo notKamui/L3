@@ -25,7 +25,7 @@ CREATE TABLE demande(
 
 INSERT INTO partie(jeu,nbmin,nbmax) VALUES
 	('La guerre des moutons', 2, 4),
-	('La guerre des moutons', 2, 4),
+	('La guerre des moutons', 2, 2),
 	('Dixit', 2, 5),
 	('Elxiir', 4, 10),
 	('Scythe',5,5),
@@ -84,3 +84,33 @@ T2: UPDATE demande SET statut = 'refusé' WHERE pid = 8;
 T2: COMMIT;
 */
 
+/*4*/
+/* T1 Admin1 T2 Admin2
+T1: BEGIN;
+T2: BEGIN;
+T1 et T2: SELECT * FROM partie;
+T1: SELECT * FROM demande WHERE pid = 2 AND statut = 'en attente' ORDER BY date DESC LIMIT 2;
+T1: UPDATE partie SET etat = 'fermé' WHERE pid = 2;
+T2: UPDATE partie SET etat = 'fermé' WHERE pid = 2;
+T2: UPDATE demande SET statut = 'refusé' WHERE pid = 2 AND statut = 'en attente' ORDER BY date DESC LIMIT 2;
+T1: UPDATE demande SET statut = 'validé' WHERE (jid = 1 OR jid = 2) AND pid = 2;
+T1: UPDATE demande SET statut = 'refusé' WHERE pid = 2 AND statut = 'en attente';
+T2: UPDATE demande SET statut = 'refusé' WHERE pid = 2 AND statut = 'en attente';
+T1: COMMIT;
+T2: COMMIT;
+*/
+
+/*5*/
+/* T1 Admin1 T2 Admin2
+T1: BEGIN;
+T2: BEGIN;
+T1 et T2: SELECT * FROM partie; SELECT * FROM demande;
+T1: UPDATE partie SET etat = 'fermé' WHERE pid = 2;
+T2: UPDATE partie SET etat = 'fermé' WHERE pid = 2;
+T1: UPDATE demande SET statut = 'validé' WHERE pid = 2 AND statut NOT LIKE 'validé' ORDER BY date DESC LIMIT 2;
+T2: UPDATE demande SET statut = 'validé' WHERE pid = 2 AND statut NOT LIKE 'validé' ORDER BY date DESC LIMIT 2;
+T1: UPDATE demande SET statut = 'fermé' WHERE pid = 2 AND statut = 'en attente';
+T2: UPDATE demande SET statut = 'fermé' WHERE pid = 2 AND statut = 'en attente';
+T1: COMMIT;
+T2: COMMIT;
+*/
