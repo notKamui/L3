@@ -87,3 +87,20 @@ Commit 2 ->
 
 (aucun bloquant)
 */
+
+/*
+7.
+
+Conflit de dépendances entre les transactions
+*/
+
+/*
+8.
+
+SELECT relfilenode FROM pg_class WHERE relname='pg_locks' ;
+ relfilenode 
+-------------
+           0
+
+Aucun verrou actif
+*/
