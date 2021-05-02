@@ -1,0 +1,17 @@
+>>> from graphe import *
+>>> from ameliorations import *
+
+# charger_donnees
+>>> reseau = Graphe()
+>>> charger_donnees(reseau, "METRO_7.txt")
+>>> sorted(reseau.sommets())
+[1639, 1648, 1649, 1674, 1681, 1685, 1695, 1696, 1703, 1734, 1740, 1744, 1757, 1773, 1790, 1800, 1805, 1806, 1808, 1846, 1849, 1854, 1860, 1871, 1876, 1907, 1911, 1925, 1944, 1953, 1964, 1971, 1985, 2015, 2020, 2055, 2080, 2085]
+>>> sorted(map(reseau.nom_sommet, reseau.sommets()))
+['Aubervilliers Pantin (4 Chemins)', 'Cadet', 'Censier-Daubenton', "Chaussée d'Antin (La Fayette)", 'Château Landon', 'Châtelet', 'Corentin-Cariou', 'Crimée', "Fort d'Aubervilliers", "Gare de l'Est (Verdun)", 'Jussieu', 'La Courneuve-8-Mai-1945', 'Le Kremlin-Bicêtre', 'Le Peletier', 'Les Gobelins', 'Louis Blanc', "Mairie d'Ivry", 'Maison Blanche', 'Opéra', 'Palais-Royal (Musée du Louvre)', 'Pierre et Marie Curie', 'Place Monge (Jardin des Plantes)', "Place d'Italie", 'Poissonnière', 'Pont Marie (Cité des Arts)', 'Pont Neuf', "Porte d'Italie", "Porte d'Ivry", 'Porte de Choisy', 'Porte de la Villette', 'Pyramides', 'Riquet', 'Stalingrad', 'Sully-Morland', 'Tolbiac', 'Villejuif-Louis Aragon', 'Villejuif-Léo Lagrange', 'Villejuif-Paul Vaillant Couturier (Hôpital Paul Brousse)']
+>>> sorted(reseau.aretes())  # doctest: +NORMALIZE_WHITESPACE
+[(1639, 1696, 'METRO_7'), (1639, 1925, 'METRO_7'), (1648, 1685, 'METRO_7'), (1648, 1854, 'METRO_7'), (1649, 1907, 'METRO_7'), (1649, 2020, 'METRO_7'), (1674, 1703, 'METRO_7'), (1674, 1860, 'METRO_7'), (1681, 1805, 'METRO_7'), (1681, 1907, 'METRO_7'), (1685, 1876, 'METRO_7'), (1695, 1696, 'METRO_7'), (1703, 2080, 'METRO_7'), (1734, 1740, 'METRO_7'), (1734, 1790, 'METRO_7'), (1740, 1808, 'METRO_7'), (1744, 1985, 'METRO_7'), (1744, 2055, 'METRO_7'), (1757, 1773, 'METRO_7'), (1757, 1846, 'METRO_7'), (1773, 1806, 'METRO_7'), (1790, 1871, 'METRO_7'), (1800, 1953, 'METRO_7'), (1800, 2015, 'METRO_7'), (1805, 1964, 'METRO_7'), (1806, 1964, 'METRO_7'), (1808, 1876, 'METRO_7'), (1846, 1971, 'METRO_7'), (1849, 1971, 'METRO_7'), (1849, 2015, 'METRO_7'), (1854, 2020, 'METRO_7'), (1860, 2085, 'METRO_7'), (1876, 1925, 'METRO_7'), (1911, 1944, 'METRO_7'), (1944, 2055, 'METRO_7'), (1953, 2085, 'METRO_7'), (1985, 2080, 'METRO_7')]
+
+
+# points_articulation
+>>> sorted(points_articulation(reseau))
+[1639, 1648, 1649, 1674, 1681, 1685, 1696, 1703, 1734, 1740, 1744, 1757, 1773, 1790, 1800, 1805, 1806, 1808, 1846, 1849, 1854, 1860, 1876, 1907, 1925, 1944, 1953, 1964, 1971, 1985, 2015, 2020, 2055, 2080, 2085]
