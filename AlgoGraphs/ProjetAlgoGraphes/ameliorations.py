@@ -59,7 +59,7 @@ def points_articulation(reseau):
     debut, parent, ancetre = numerotation(reseau)
     articulations = set()
 
-    racines = {v for v in reseau.sommets() if parent[v] is None}
+    racines = set(filter(lambda x: parent[x] is None, reseau.sommets()))
     for depart in racines:
         if sum(v == depart for v in parent.values()) >= 2:
             articulations.add(depart)
@@ -73,12 +73,44 @@ def points_articulation(reseau):
 
 
 def ponts(reseau):
-    return
+    debut, parent, ancetre = numerotation(reseau)
+    ret = set()
+    for u in reseau.sommets():
+        v = parent[u]
+        if v is not None and ancetre[u] > debut[v]:
+            ret.add((u, v))
+    return ret
 
 
-def ameliorations_ponts(reseau):
-    return
+def amelioration_ponts(reseau):
+    ponts_ = ponts(reseau)
+    pivots = list(set(sum(ponts_, ())))
+    csp_lst = list()
+
+    def trouver_csp(depart, csp):
+        csp.add(depart)
+        for v in reseau.voisins(depart):
+            if v not in evite and v not in csp and (v in pivots or not trouver_csp(v, csp)):
+                return False
+        return True
+
+    for (u, v) in ponts_:
+        evite = [u, v]
+        csp = set()
+        if trouver_csp(u, csp):
+            csp_lst.append(csp)
+        csp = set()
+        if trouver_csp(v, csp):
+            csp_lst.append(csp)
+
+    def take_rand(csp):
+        if len(csp) > 1:
+            csp = filter(lambda s: s not in pivots, csp)
+        return next(iter(csp))
+
+    tmp = list(map(lambda csp: take_rand(csp), csp_lst))
+    return set(zip(tmp, tmp[1:] + tmp[:1]))
 
 
-def ameliorations_ponts_articulation(reseau):
-    return
+def amelioration_points_articulation(reseau):
+    pass

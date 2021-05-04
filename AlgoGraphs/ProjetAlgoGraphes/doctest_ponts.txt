@@ -4,7 +4,7 @@ Vous devez avoir implémenté la classe Graphe et la fonction ponts.
 Rajoutez éventuellement ci-dessous les imports nécessaires:
 
 >>> from graphe import *
->>> from fragilite import *
+>>> from ameliorations import *
 
 >>> # exemple de l'énoncé
 >>> G = Graphe()

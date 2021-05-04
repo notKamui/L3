@@ -5,7 +5,7 @@ Vous devez avoir déjà implémenté la classe Graphe et la fonction ponts.
 Rajoutez éventuellement ci-dessous les imports nécessaires:
 
 >>> from graphe import *
->>> from fragilite import *
+>>> from ameliorations import *
 
 Exemple de l'énoncé:
 

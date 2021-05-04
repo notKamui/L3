@@ -25,8 +25,9 @@ class Graphe(object):
 
     def ajouter_sommet(self, sommet, nom):
         """Ajoute un sommet (de n'importe quel type hashable) au graphe."""
-        self.dictionnaire[sommet] = set()
-        self.noms[sommet] = nom
+        if sommet not in self.dictionnaire.keys():
+            self.dictionnaire[sommet] = set()
+            self.noms[sommet] = nom
 
     def ajouter_sommets(self, iterable):
         """Ajoute tous les sommets de l'itérable donné au graphe. N'importe
