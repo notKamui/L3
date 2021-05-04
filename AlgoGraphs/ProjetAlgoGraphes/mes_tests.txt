@@ -24,7 +24,6 @@
 >>> charger_donnees(rer, "RER_A.txt")
 >>> charger_donnees(rer, "RER_B.txt")
 >>> tmp = amelioration_ponts(rer)
->>> print(tmp)
 >>> for u, v in tmp: 
 ...     rer.ajouter_arete(u, v, "RER")
 >>> len(ponts(rer))
