@@ -5,7 +5,7 @@ Vous devez avoir implémenté la classe Graphe et la fonction points_articulatio
 Rajoutez éventuellement ci-dessous les imports nécessaires:
 
 >>> from graphe import *
->>> from fragilite import *
+>>> from ameliorations import *
 
 Exemple de l'énoncé:
 

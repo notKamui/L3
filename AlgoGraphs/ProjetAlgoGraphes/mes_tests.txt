@@ -23,8 +23,22 @@
 >>> rer = Graphe()
 >>> charger_donnees(rer, "RER_A.txt")
 >>> charger_donnees(rer, "RER_B.txt")
+>>> len(ponts(rer))
+91
 >>> tmp = amelioration_ponts(rer)
 >>> for u, v in tmp: 
 ...     rer.ajouter_arete(u, v, "RER")
 >>> len(ponts(rer))
+0
+
+# amelioration_points_articulation
+>>> rer = Graphe()
+>>> charger_donnees(rer, "RER_A.txt")
+>>> charger_donnees(rer, "RER_B.txt")
+>>> len(points_articulation(rer))
+83
+>>> tmp = amelioration_points_articulation(rer)
+>>> for u, v in tmp:
+...     rer.ajouter_arete(u, v, "RER")
+>>> len(points_articulation(rer))
 0

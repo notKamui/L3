@@ -97,9 +97,11 @@ def ponts(reseau):
 
 def amelioration_ponts(reseau):
     """
-    Retourne un ensemble d'aretes possible pour supprimer les ponts du reseau donné
+    Retourne un ensemble d'aretes possible pour supprimer les ponts du réseau donné
     """
     ponts_set = ponts(reseau)
+    if len(ponts_set) == 0:
+        return set()
     pivots = list(set(sum(ponts_set, ())))
     csp_lst = list()
 
@@ -141,4 +143,40 @@ def amelioration_ponts(reseau):
 
 
 def amelioration_points_articulation(reseau):
-    pass
+    """
+    Retourne un ensemble d'arete possible pour supprimer les points d'articulation du réseau donné
+    """
+    debut, parent, ancetre = numerotation(reseau)
+    articulations = list(sorted(
+        points_articulation(reseau),
+        key=lambda it: debut[it],
+        reverse=True
+    ))
+    if len(articulations) == 0:
+        return set()
+    racine = next(filter(lambda s: debut[s] == 1, reseau.sommets()))
+    ret = set()
+    fils = list()
+
+    # check si la dernière articulation est la racine, et la retire si c'est le cas
+    flag_racine = False
+    if articulations[-1] == racine:
+        flag_racine = True
+        articulations.pop()
+
+    # check des cycles des articulations et ajout des aretes vers la racin
+    for v in reseau.sommets():
+        if v not in articulations and parent[v] in articulations and ancetre[v] >= debut[parent[v]]:
+            ret.add((racine, v))
+
+    if flag_racine:
+        # ajoute à fils chaque fils de racine
+        for u in reseau.sommets():
+            if parent[u] == racine:
+                fils.append(u)
+
+    # ajoute au set final les paires deux à deux des fils de la racine
+    if len(fils) >= 2:
+        ret.update(list(zip(fils, fils[1:] + fils[:1]))[:-1])
+
+    return ret
