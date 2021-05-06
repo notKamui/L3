@@ -8,7 +8,7 @@
 [1635, 1756, 1797, 1860, 1900, 2002, 2013, 2075]
 >>> sorted(map(reseau.nom_sommet, reseau.sommets()))
 ['Bolivar', 'Botzaris', 'Buttes-Chaumont', 'Danube', 'Jaurès', 'Louis Blanc', 'Place des Fêtes', 'Pré-Saint-Gervais']
->>> sorted(reseau.aretes())  # doctest: +NORMALIZE_WHITESPACE
+>>> sorted(reseau.aretes())
 [(1635, 1756, 'METRO_7b'), (1635, 2002, 'METRO_7b'), (1756, 1797, 'METRO_7b'), (1797, 2002, 'METRO_7b'), (1860, 1900, 'METRO_7b'), (1900, 2075, 'METRO_7b'), (2002, 2013, 'METRO_7b'), (2013, 2075, 'METRO_7b')]
 
 # points_articulation

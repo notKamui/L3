@@ -1,6 +1,7 @@
 from graphe import *
 import os.path
 import math
+import argparse
 
 
 def charger_donnees(graphe, fichier):
@@ -9,7 +10,7 @@ def charger_donnees(graphe, fichier):
     Si le fichier n'existe pas, alors rien n'est effectué (outre un message d'erreur).
     """
     if not os.path.isfile(fichier):
-        print("Ce fichier est introuvable")
+        print("Le fichier " + fichier + " est introuvable. Il est ignoré.")
         return
 
     with open(fichier) as f:
@@ -120,12 +121,10 @@ def amelioration_ponts(reseau):
     # Pour chaque pont, scanner les csp autour et les ajouter à la csp_list si ce sont des feuilles
     for (u, v) in ponts_set:
         skip = [u, v]
-        csp = set()
-        if scan_csp_feuille(u, csp, skip):
-            csp_lst.append(csp)
-        csp = set()
-        if scan_csp_feuille(v, csp, skip):
-            csp_lst.append(csp)
+        for s in skip:
+            csp = set()
+            if scan_csp_feuille(s, csp, skip):
+                csp_lst.append(csp)
 
     def take_rand(csp):
         """
@@ -180,3 +179,146 @@ def amelioration_points_articulation(reseau):
         ret.update(list(zip(fils, fils[1:] + fils[:1]))[:-1])
 
     return ret
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Analyse et améliore les réseaux ferrés de Paris"
+    )
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument(
+        "--metro",
+        help="analyse les lignes de Métro",
+        nargs="*"
+    )
+    group.add_argument(
+        "--rer",
+        help="analyse les lignes RER",
+        nargs="*"
+    )
+    parser.add_argument(
+        "-l",
+        "--liste-stations",
+        help="affiche la liste des stations du réseau",
+        action="store_true"
+    )
+    parser.add_argument(
+        "-a",
+        "--articulations",
+        help="affiche les points d'articulation du réseau",
+        action="store_true"
+    )
+    parser.add_argument(
+        "-p",
+        "--ponts",
+        help="affiche les ponts du réseau",
+        action="store_true"
+    )
+    parser.add_argument(
+        "-A",
+        "--ameliorer-articulations",
+        help="idem que -a, en plus d'afficher les arêtes à ajouter pour que ces stations ne soient plus des points d'articulation",
+        action="store_true"
+    )
+    parser.add_argument(
+        "-P",
+        "--ameliorer-ponts",
+        help="idem que -p, en plus d'afficher les arêtes à ajouter pour que ces ponts n'en soient plus",
+        action="store_true"
+    )
+
+    args = parser.parse_args()
+
+    if args.rer is not None:
+        lines = args.rer
+        prefix = "RER"
+    else:
+        lines = args.metro
+        prefix = "METRO"
+
+    if len(lines) == 0:
+        files = [file for file in os.listdir('.') if file.startswith(prefix)]
+        print("Chargement des lignes de {1}...".format(
+            lines, prefix.lower()))
+    else:
+        files = list(map(lambda file: prefix + "_" + file + ".txt", lines))
+        print("Chargement des lignes {0} de {1}...".format(
+            lines, prefix.lower()))
+
+    reseau = Graphe()
+    for file in files:
+        charger_donnees(reseau, file)
+
+    print("Terminé !")
+
+    print("Le réseau contient {0} sommet(s) et {1} arête(s).".format(
+        len(reseau.sommets()), len(reseau.aretes())))
+
+    print()
+
+    if args.liste_stations:
+        print("Le réseau contient les stations suivantes:")
+        for s in sorted(reseau.sommets(), key=reseau.nom_sommet):
+            print("{0} ({1})".format(reseau.nom_sommet(s), s))
+        print()
+
+    if args.ponts or args.ameliorer_ponts:
+        ponts_ = ponts(reseau)
+        if len(ponts_) > 0:
+            print("Le réseau contient le(s) {0} pont(s) suivant(s)".format(
+                len(ponts_)
+            ))
+            fm = sorted(list(map(
+                lambda p: "{0} -- {1}".format(
+                    reseau.nom_sommet(p[0]), reseau.nom_sommet(p[1])
+                ),
+                ponts_
+            )))
+            for p in fm:
+                print("\t{0}".format(p))
+        else:
+            print("Le réseau ne contient aucun pont.")
+
+        print()
+        if args.ameliorer_ponts and len(ponts_) > 0:
+            aretes = amelioration_ponts(reseau)
+            print("On peut éliminer tout les ponts du réseau en rajoutant les {0} arête(s) suivante(s):".format(
+                len(aretes)
+            ))
+            fm = sorted(list(map(
+                lambda p: "{0} -- {1}".format(
+                    reseau.nom_sommet(p[0]), reseau.nom_sommet(p[1])
+                ),
+                aretes
+            )))
+            for p in fm:
+                print("\t{0}".format(p))
+        print()
+
+    if args.articulations or args.ameliorer_articulations:
+        articulations = points_articulation(reseau)
+        if len(articulations) > 0:
+            print("Le réseau contient le(s) {0} point(s) d'articulation suivant(s)".format(
+                len(articulations)
+            ))
+            fm = sorted(list(map(reseau.nom_sommet, articulations)))
+            for i, s in enumerate(fm, start=1):
+                print("\t{0} : {1}".format(i, s))
+        else:
+            print("Le réseau ne contient aucun point d'articulation")
+
+        print()
+        if args.ameliorer_articulations and len(articulations) > 0:
+            aretes = amelioration_points_articulation(reseau)
+            print("On peut éliminer tout les points d'articulation du réseau en rajoutant les {0} arête(s) suivante(s):".format(
+                len(aretes)
+            ))
+            fm = sorted(list(map(
+                lambda p: "{0} -- {1}".format(
+                    reseau.nom_sommet(p[0]), reseau.nom_sommet(p[1])
+                ),
+                aretes
+            )))
+            for p in fm:
+                print("\t{0}".format(p))
+        print()
