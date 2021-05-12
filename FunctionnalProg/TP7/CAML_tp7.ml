@@ -1,11 +1,7 @@
-;;
-#use "topfind"
+(* #require "graphics";; *)
 
-;;
-#require "graphics"
-
-open Graphics
-open Float
+open Graphics;;
+open Float;;
 
 (* Type for the representation of functional images. *)
 type picture = int * int -> color
@@ -33,35 +29,35 @@ let render (f : picture) =
 let black_on_black : picture = fun _ -> black
 
 let half_plane color : picture =
- fun (x, y) -> if x < w / 2 then color else background
+  fun (x, y) -> if x < w / 2 then color else background
 
 let diagonal color : picture = fun (x, y) -> if x = y then color else background
 
 let square size color : picture =
- fun (x, y) ->
+  fun (x, y) ->
   let half = size / 2 in
   if x > -half && x <= half && y > -half && y <= half then color else background
 
 let rectangle width height color : picture =
- fun (x, y) ->
+  fun (x, y) ->
   let halfX = width / 2 and halfY = height / 2 in
   if x > -halfX && x <= halfX && y > -halfY && y <= halfY then color
   else background
 
 let disk radius color : picture =
- fun (x, y) ->
+  fun (x, y) ->
   let hypotP2 = (x * x) + (y * y) in
   if hypotP2 <= radius * radius then color else background
 
 let circle radius color : picture =
- fun (x, y) ->
+  fun (x, y) ->
   let hypotP2 = (x * x) + (y * y) in
   if hypotP2 > (radius - 3) * (radius - 1) && hypotP2 <= radius * radius then
     color
   else background
 
 let move pic offset : picture =
- fun (x, y) ->
+  fun (x, y) ->
   let offX, offY = offset in
   pic (x + offX, y + offY)
 
@@ -70,13 +66,13 @@ let vertical_symmetry pic : picture = fun (x, y) -> pic (x, -y)
 let horizontal_symmetry pic : picture = fun (x, y) -> pic (-x, y)
 
 let v_lines n : picture =
- fun (x, _) -> if x mod n = 0 then black else background
+  fun (x, _) -> if x mod n = 0 then black else background
 
 let v_stripes n : picture =
- fun (x, _) -> if x mod ((n * 2) + 1) < n then black else background
+  fun (x, _) -> if x mod ((n * 2) + 1) < n then black else background
 
 let chessboard color n : picture =
- fun (x, y) ->
+  fun (x, y) ->
   if
     (x mod ((n * 2) + 1) < n && y mod ((n * 2) + 1) >= n)
     || (x mod ((n * 2) + 1) >= n && y mod ((n * 2) + 1) < n)
@@ -84,12 +80,12 @@ let chessboard color n : picture =
   else background
 
 let concentric color n : picture =
- fun (x, y) ->
+  fun (x, y) ->
   let h = int_of_float (hypot (float_of_int x) (float_of_int y)) in
   if h mod ((n * 2) + 1) < n then color else background
 
 let compose_two pic1 pic2 : picture =
- fun (x, y) -> if pic2 (x, y) != background then pic2 (x, y) else pic1 (x, y)
+  fun (x, y) -> if pic2 (x, y) != background then pic2 (x, y) else pic1 (x, y)
 
 let compose pics : picture =
   let rec aux pics res =
@@ -100,7 +96,7 @@ let compose pics : picture =
   aux pics (fun _ -> background)
 
 let rotate pic theta : picture =
- fun (x, y) ->
+  fun (x, y) ->
   let xf = float_of_int x and yf = float_of_int y in
   let c = cos theta and s = sin theta in
   pic
@@ -119,7 +115,7 @@ let sun color : picture =
     ]
 
 let compose_xor_two pic1 pic2 : picture =
- fun (x, y) ->
+  fun (x, y) ->
   if pic1 (x, y) != background && pic2 (x, y) != background then background
   else if pic1 (x, y) != background then pic1 (x, y)
   else if pic2 (x, y) != background then pic2 (x, y)

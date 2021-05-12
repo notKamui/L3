@@ -78,19 +78,19 @@ type quadtree =
 (* rectangle -> rectangle * rectangle * rectangle * rectangle  *)
 (* rectangle_split_four *)
 let rectangle_split_four (r : rectangle) :
-    rectangle * rectangle * rectangle * rectangle =
+  rectangle * rectangle * rectangle * rectangle =
   let pl, pr = r in
   match r with
   | (xl, yl), (xr, yr) ->
-      let m = make_point ((xl +. xr) /. 2.) ((yl +. yr) /. 2.) in
-      let u = make_point ((xl +. xr) /. 2.) yr in
-      let l = make_point xl ((yl +. yr) /. 2.) in
-      let d = make_point ((xl +. xr) /. 2.) yl in
-      let r = make_point xr ((yl +. yr) /. 2.) in
-      ( make_rectangle l u,
-        make_rectangle m pr,
-        make_rectangle d r,
-        make_rectangle pl m )
+    let m = make_point ((xl +. xr) /. 2.) ((yl +. yr) /. 2.) in
+    let u = make_point ((xl +. xr) /. 2.) yr in
+    let l = make_point xl ((yl +. yr) /. 2.) in
+    let d = make_point ((xl +. xr) /. 2.) yl in
+    let r = make_point xr ((yl +. yr) /. 2.) in
+    ( make_rectangle l u,
+      make_rectangle m pr,
+      make_rectangle d r,
+      make_rectangle pl m )
 
 (* Question 10 *)
 (* ’a list -> ’a *)
@@ -144,8 +144,8 @@ let rec quadtree_count (tree : quadtree) : int =
   match tree with
   | Leaf (ps, _) -> List.length ps
   | Node (nw, ne, se, sw, _) ->
-      quadtree_count nw + quadtree_count ne + quadtree_count se
-      + quadtree_count sw
+    quadtree_count nw + quadtree_count ne + quadtree_count se
+    + quadtree_count sw
 
 (* Question 14 *)
 (* quadtree -> int list *)
@@ -154,8 +154,8 @@ let rec quadtree_signature (tree : quadtree) : int list =
   match tree with
   | Leaf (ps, _) -> [ List.length ps ]
   | Node (nw, ne, se, sw, _) ->
-      quadtree_signature nw @ quadtree_signature ne @ quadtree_signature se
-      @ quadtree_signature sw
+    quadtree_signature nw @ quadtree_signature ne @ quadtree_signature se
+    @ quadtree_signature sw
 
 (* -------------------------------------------------------------------------- *)
 
@@ -166,8 +166,8 @@ let rec quadtree_all_points (tree : quadtree) : point list =
   match tree with
   | Leaf (ps, _) -> ps
   | Node (nw, ne, se, sw, _) ->
-      quadtree_all_points nw @ quadtree_all_points ne @ quadtree_all_points se
-      @ quadtree_all_points sw
+    quadtree_all_points nw @ quadtree_all_points ne @ quadtree_all_points se
+    @ quadtree_all_points sw
 
 (* rectangle -> rectangle -> bool *)
 let rectangle_contains_rectangle (r1 : rectangle) (r2 : rectangle) : bool =
@@ -180,7 +180,7 @@ let rectangle_disjoint ((p1, p2) : rectangle) ((p3, p4) : rectangle) : bool =
 
 (* rectangle * rectangle -> rectangle *)
 let rectangle_intersection (((p1, p2), (p3, p4)) : rectangle * rectangle) :
-    rectangle =
+  rectangle =
   let ll_x_max = largest [ point_x p1; point_x p3 ] in
   let ll_y_max = largest [ point_y p1; point_y p3 ] in
   let ur_x_min = smallest [ point_x p2; point_x p4 ] in
@@ -195,13 +195,13 @@ let rectangle_intersection (((p1, p2), (p3, p4)) : rectangle * rectangle) :
 let rec rectangle_query (r : rectangle) (tree : quadtree) : point list =
   match tree with
   | Leaf (ps, root) when not (rectangle_disjoint r root) ->
-      if rectangle_contains_rectangle root r then ps
-      else rectangle_contains_points r ps
+    if rectangle_contains_rectangle root r then ps
+    else rectangle_contains_points r ps
   | Node (nw, ne, se, sw, root) when not (rectangle_disjoint r root) ->
-      if rectangle_contains_rectangle root r then quadtree_all_points tree
-      else
-        rectangle_query r nw @ rectangle_query r ne @ rectangle_query r se
-        @ rectangle_query r sw
+    if rectangle_contains_rectangle root r then quadtree_all_points tree
+    else
+      rectangle_query r nw @ rectangle_query r ne @ rectangle_query r se
+      @ rectangle_query r sw
   | _ -> []
 
 (* -------------------------------------------------------------------------- *)

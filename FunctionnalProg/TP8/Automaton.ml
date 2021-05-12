@@ -1,11 +1,11 @@
 let memo f =
-    let m = ref [] in
-    fun x ->
-        try List.assoc x !m
-        with Not_found ->
-            let y = f x in
-            m := (x, y) :: !m;
-            y
+  let m = ref [] in
+  fun x ->
+    try List.assoc x !m
+    with Not_found ->
+      let y = f x in
+      m := (x, y) :: !m;
+      y
 
 (**********************************************************************)
 (***************************** Exercice 1 *****************************)
@@ -14,8 +14,8 @@ let memo f =
 (* 1.1. *)
 (* val interval : int -> int -> int list = <fun> *)
 let interval a b =
-    if a > b then  []
-    else List.init (b - a + 1) (fun i -> i + a)
+  if a > b then  []
+  else List.init (b - a + 1) (fun i -> i + a)
 
 (* 1.2. *)
 (* val string_of_list : 'a list -> ('a -> string) -> string = <fun> *)
@@ -24,62 +24,62 @@ let string_of_list lst mapper = List.fold_left (fun acc next -> acc ^ (mapper ne
 (* 1.3. *)
 (* val compose_iter : ('a -> 'a) -> 'a -> int -> 'a list = <fun> *)
 let compose_iter f x n =
-    let rec aux v it =
-        if it = 0 then v
-        else aux (f v) (it - 1)
-    in List.init (n + 1) (fun i -> aux x i);;
+  let rec aux v it =
+    if it = 0 then v
+    else aux (f v) (it - 1)
+  in List.init (n + 1) (fun i -> aux x i);;
 
 (* 1.4. *)
 (* val is_prefix_lists : 'a list -> 'a list -> bool = <fun> *)
 let rec is_prefix_lists pref lst =
-    if pref = [] then
-        true
-    else if lst != [] && List.hd pref = List.hd lst then
-        is_prefix_lists (List.tl pref) (List.tl lst)
-    else
-        false
+  if pref = [] then
+    true
+  else if lst != [] && List.hd pref = List.hd lst then
+    is_prefix_lists (List.tl pref) (List.tl lst)
+  else
+    false
 
 (* 1.5. *)
 (* val is_factor_lists : 'a list -> 'a list -> bool = <fun> *)
 let rec is_factor_lists fact lst =
-    if fact = [] then true
-    else if lst = [] then false
-    else if is_prefix_lists fact lst then true
-    else is_factor_lists fact (List.tl lst)
+  if fact = [] then true
+  else if lst = [] then false
+  else if is_prefix_lists fact lst then true
+  else is_factor_lists fact (List.tl lst)
 
 (* 1.6. *)
 (* val is_subword_lists : 'a list -> 'a list -> bool = <fun> *)
 let rec is_subword_lists sub lst = 
-    if sub = [] then
-        true
-    else if lst = [] then
-        false
-    else if List.hd lst = List.hd sub then
-        is_subword_lists (List.tl sub) (List.tl lst)
-    else
-        is_subword_lists sub (List.tl lst)
+  if sub = [] then
+    true
+  else if lst = [] then
+    false
+  else if List.hd lst = List.hd sub then
+    is_subword_lists (List.tl sub) (List.tl lst)
+  else
+    is_subword_lists sub (List.tl lst)
 
 (* 1.7. *)
 (* val is_duplicate_free : 'a list -> bool = <fun> *)
 exception Found
 let is_duplicate_free lst =
-    let hash = Hashtbl.create (List.length lst) in
-    try (
-        List.iter (fun el ->
-            if (Hashtbl.mem hash el) then (raise Found)
-            else (Hashtbl.add hash el true)
-        ) lst;
-        true
-    ) with Found -> false
+  let hash = Hashtbl.create (List.length lst) in
+  try (
+    List.iter (fun el ->
+        if (Hashtbl.mem hash el) then (raise Found)
+        else (Hashtbl.add hash el true)
+      ) lst;
+    true
+  ) with Found -> false
 
 (**********************************************************************)
 (***************************** Exercice 2 *****************************)
 (**********************************************************************)
 
 type 'a automaton = {
-    ribbon: int -> 'a;
-    evol: 'a * 'a * 'a -> 'a;
-    void: 'a
+  ribbon: int -> 'a;
+  evol: 'a * 'a * 'a -> 'a;
+  void: 'a
 }
 
 (* 2.1. *)
@@ -103,9 +103,9 @@ type bunch = int * int
 (* 3.1. *)
 (* val get_bunch_values : 'a automaton -> bunch -> 'a list = <fun> *)
 let get_bunch_values atm bnc =
-    let (a, b) = bnc in
-    let itvl = interval a b in
-    List.map (fun i -> atm.ribbon i) itvl
+  let (a, b) = bnc in
+  let itvl = interval a b in
+  List.map (fun i -> atm.ribbon i) itvl
 
 
 (* 3.2. *)
@@ -174,27 +174,27 @@ let chaos = create (fun (a, b, c) ->
             match c with
             | White -> White
             | Black -> Black
-        )
+          )
         | Black -> (
             match c with
             | White -> Black
             | Black -> Black
-        )
-    )
+          )
+      )
     | Black -> (
         match b with
         | White -> (
             match c with
             | White -> Black
             | Black -> White
-        )
+          )
         | Black -> (
             match c with
             | White -> White
             | Black -> White
-        )
-    )
-) White
+          )
+      )
+  ) White
 
 (**********************************************************************)
 (***************************** Exercice 6 *****************************)
@@ -209,7 +209,7 @@ evolutions aut 16;;
     (List.map (fun a ->
         to_string a (-8, 8) string_of_int
     ) (evolutions aut 16))
-);;*)
+  );;*)
 (* Trop long et couteux car calcul a chaque fois *)
 
 (* 6.2. *)

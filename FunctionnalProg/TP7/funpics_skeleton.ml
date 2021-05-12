@@ -1,5 +1,3 @@
-#load "graphics.cma"
-
 open Graphics
 
 (* Dimensions of the graphical window. *)
