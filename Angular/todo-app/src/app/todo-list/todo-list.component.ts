@@ -11,10 +11,10 @@ import { TodoService } from '../todo.service';
   styleUrls: ['./todo-list.component.css'],
 })
 export class TodoListComponent implements OnInit {
-  todos: any = [];
+  todos: Todo[] = [];
   private username = '';
 
-  constructor(public service: TodoService, private route: ActivatedRoute) {}
+  constructor(private service: TodoService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.username = this.route.snapshot.paramMap.get('username') ?? '';
@@ -22,7 +22,9 @@ export class TodoListComponent implements OnInit {
   }
 
   fetchTodos(): void {
-    this.service.getTodos(this.username).subscribe((res) => (this.todos = res));
+    this.service
+      .getTodos(this.username)
+      .subscribe((res: Todo[]) => (this.todos = res));
   }
 
   addNewTodo(newTodo: string): void {
